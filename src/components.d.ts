@@ -6,6 +6,20 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface GuestbookCaptureCycle {
+        "mediaDimensions": | {
+        videoElementWidth: number;
+        videoElementHeight: number;
+        mediaWidth: number;
+        mediaHeight: number;
+        aspectRatio: number;
+      }
+    | undefined;
+    }
+    interface InitGuestbookMediaSettings {
+        "aspectRatio": number;
+        "idealWidth": number;
+    }
     interface MyComponent {
         /**
           * The first name
@@ -20,42 +34,130 @@ export namespace Components {
          */
         "middle": string;
     }
+    interface RootComponent {
+    }
+    interface SmartGuestbookCaptureCycle {
+    }
+}
+export interface InitGuestbookMediaSettingsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLInitGuestbookMediaSettingsElement;
 }
 declare global {
+    interface HTMLGuestbookCaptureCycleElement extends Components.GuestbookCaptureCycle, HTMLStencilElement {
+    }
+    var HTMLGuestbookCaptureCycleElement: {
+        prototype: HTMLGuestbookCaptureCycleElement;
+        new (): HTMLGuestbookCaptureCycleElement;
+    };
+    interface HTMLInitGuestbookMediaSettingsElementEventMap {
+        "initSettingsError": string;
+        "initSettingsComplete": {
+    videoElementWidth: number;
+    videoElementHeight: number;
+    mediaWidth: number;
+    mediaHeight: number;
+    aspectRatio: number;
+  };
+    }
+    interface HTMLInitGuestbookMediaSettingsElement extends Components.InitGuestbookMediaSettings, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLInitGuestbookMediaSettingsElementEventMap>(type: K, listener: (this: HTMLInitGuestbookMediaSettingsElement, ev: InitGuestbookMediaSettingsCustomEvent<HTMLInitGuestbookMediaSettingsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLInitGuestbookMediaSettingsElementEventMap>(type: K, listener: (this: HTMLInitGuestbookMediaSettingsElement, ev: InitGuestbookMediaSettingsCustomEvent<HTMLInitGuestbookMediaSettingsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLInitGuestbookMediaSettingsElement: {
+        prototype: HTMLInitGuestbookMediaSettingsElement;
+        new (): HTMLInitGuestbookMediaSettingsElement;
+    };
     interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
     }
     var HTMLMyComponentElement: {
         prototype: HTMLMyComponentElement;
         new (): HTMLMyComponentElement;
     };
+    interface HTMLRootComponentElement extends Components.RootComponent, HTMLStencilElement {
+    }
+    var HTMLRootComponentElement: {
+        prototype: HTMLRootComponentElement;
+        new (): HTMLRootComponentElement;
+    };
+    interface HTMLSmartGuestbookCaptureCycleElement extends Components.SmartGuestbookCaptureCycle, HTMLStencilElement {
+    }
+    var HTMLSmartGuestbookCaptureCycleElement: {
+        prototype: HTMLSmartGuestbookCaptureCycleElement;
+        new (): HTMLSmartGuestbookCaptureCycleElement;
+    };
     interface HTMLElementTagNameMap {
+        "guestbook-capture-cycle": HTMLGuestbookCaptureCycleElement;
+        "init-guestbook-media-settings": HTMLInitGuestbookMediaSettingsElement;
         "my-component": HTMLMyComponentElement;
+        "root-component": HTMLRootComponentElement;
+        "smart-guestbook-capture-cycle": HTMLSmartGuestbookCaptureCycleElement;
     }
 }
 declare namespace LocalJSX {
+    interface GuestbookCaptureCycle {
+        "mediaDimensions"?: | {
+        videoElementWidth: number;
+        videoElementHeight: number;
+        mediaWidth: number;
+        mediaHeight: number;
+        aspectRatio: number;
+      }
+    | undefined;
+    }
+    interface InitGuestbookMediaSettings {
+        "aspectRatio": number;
+        "idealWidth": number;
+        "onInitSettingsComplete"?: (event: InitGuestbookMediaSettingsCustomEvent<{
+    videoElementWidth: number;
+    videoElementHeight: number;
+    mediaWidth: number;
+    mediaHeight: number;
+    aspectRatio: number;
+  }>) => void;
+        "onInitSettingsError"?: (event: InitGuestbookMediaSettingsCustomEvent<string>) => void;
+    }
     interface MyComponent {
         /**
           * The first name
          */
-        "first"?: string;
+        "first": string;
         /**
           * The last name
          */
-        "last"?: string;
+        "last": string;
         /**
           * The middle name
          */
-        "middle"?: string;
+        "middle": string;
+    }
+    interface RootComponent {
+    }
+    interface SmartGuestbookCaptureCycle {
     }
     interface IntrinsicElements {
+        "guestbook-capture-cycle": GuestbookCaptureCycle;
+        "init-guestbook-media-settings": InitGuestbookMediaSettings;
         "my-component": MyComponent;
+        "root-component": RootComponent;
+        "smart-guestbook-capture-cycle": SmartGuestbookCaptureCycle;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "guestbook-capture-cycle": LocalJSX.GuestbookCaptureCycle & JSXBase.HTMLAttributes<HTMLGuestbookCaptureCycleElement>;
+            "init-guestbook-media-settings": LocalJSX.InitGuestbookMediaSettings & JSXBase.HTMLAttributes<HTMLInitGuestbookMediaSettingsElement>;
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "root-component": LocalJSX.RootComponent & JSXBase.HTMLAttributes<HTMLRootComponentElement>;
+            "smart-guestbook-capture-cycle": LocalJSX.SmartGuestbookCaptureCycle & JSXBase.HTMLAttributes<HTMLSmartGuestbookCaptureCycleElement>;
         }
     }
 }
