@@ -7,14 +7,16 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface GuestbookCaptureCycle {
-        "mediaDimensions": | {
-        videoElementWidth: number;
-        videoElementHeight: number;
-        mediaWidth: number;
-        mediaHeight: number;
-        aspectRatio: number;
-      }
-    | undefined;
+        "capture": () => Promise<string | undefined>;
+        "countdown": (start: number, stop: number) => Promise<void>;
+        "countdownInt"?: number;
+        "mediaDimensions": {
+    videoElementWidth: number;
+    videoElementHeight: number;
+    mediaWidth: number;
+    mediaHeight: number;
+    aspectRatio: number;
+  };
     }
     interface InitGuestbookMediaSettings {
         "aspectRatio": number;
@@ -102,14 +104,14 @@ declare global {
 }
 declare namespace LocalJSX {
     interface GuestbookCaptureCycle {
-        "mediaDimensions"?: | {
-        videoElementWidth: number;
-        videoElementHeight: number;
-        mediaWidth: number;
-        mediaHeight: number;
-        aspectRatio: number;
-      }
-    | undefined;
+        "countdownInt"?: number;
+        "mediaDimensions": {
+    videoElementWidth: number;
+    videoElementHeight: number;
+    mediaWidth: number;
+    mediaHeight: number;
+    aspectRatio: number;
+  };
     }
     interface InitGuestbookMediaSettings {
         "aspectRatio": number;
