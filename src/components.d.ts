@@ -6,10 +6,12 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface DisplayPhotoGrid {
+    }
     interface GuestbookCaptureCycle {
         "capture": () => Promise<string | undefined>;
+        "clearCountdown": () => Promise<void>;
         "countdown": (start: number, stop: number) => Promise<void>;
-        "countdownInt"?: number;
         "mediaDimensions": {
     videoElementWidth: number;
     videoElementHeight: number;
@@ -17,6 +19,7 @@ export namespace Components {
     mediaHeight: number;
     aspectRatio: number;
   };
+        "setCountdownInt": (num: number) => Promise<void>;
     }
     interface InitGuestbookMediaSettings {
         "aspectRatio": number;
@@ -46,6 +49,12 @@ export interface InitGuestbookMediaSettingsCustomEvent<T> extends CustomEvent<T>
     target: HTMLInitGuestbookMediaSettingsElement;
 }
 declare global {
+    interface HTMLDisplayPhotoGridElement extends Components.DisplayPhotoGrid, HTMLStencilElement {
+    }
+    var HTMLDisplayPhotoGridElement: {
+        prototype: HTMLDisplayPhotoGridElement;
+        new (): HTMLDisplayPhotoGridElement;
+    };
     interface HTMLGuestbookCaptureCycleElement extends Components.GuestbookCaptureCycle, HTMLStencilElement {
     }
     var HTMLGuestbookCaptureCycleElement: {
@@ -95,6 +104,7 @@ declare global {
         new (): HTMLSmartGuestbookCaptureCycleElement;
     };
     interface HTMLElementTagNameMap {
+        "display-photo-grid": HTMLDisplayPhotoGridElement;
         "guestbook-capture-cycle": HTMLGuestbookCaptureCycleElement;
         "init-guestbook-media-settings": HTMLInitGuestbookMediaSettingsElement;
         "my-component": HTMLMyComponentElement;
@@ -103,8 +113,9 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface DisplayPhotoGrid {
+    }
     interface GuestbookCaptureCycle {
-        "countdownInt"?: number;
         "mediaDimensions": {
     videoElementWidth: number;
     videoElementHeight: number;
@@ -144,6 +155,7 @@ declare namespace LocalJSX {
     interface SmartGuestbookCaptureCycle {
     }
     interface IntrinsicElements {
+        "display-photo-grid": DisplayPhotoGrid;
         "guestbook-capture-cycle": GuestbookCaptureCycle;
         "init-guestbook-media-settings": InitGuestbookMediaSettings;
         "my-component": MyComponent;
@@ -155,6 +167,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "display-photo-grid": LocalJSX.DisplayPhotoGrid & JSXBase.HTMLAttributes<HTMLDisplayPhotoGridElement>;
             "guestbook-capture-cycle": LocalJSX.GuestbookCaptureCycle & JSXBase.HTMLAttributes<HTMLGuestbookCaptureCycleElement>;
             "init-guestbook-media-settings": LocalJSX.InitGuestbookMediaSettings & JSXBase.HTMLAttributes<HTMLInitGuestbookMediaSettingsElement>;
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;

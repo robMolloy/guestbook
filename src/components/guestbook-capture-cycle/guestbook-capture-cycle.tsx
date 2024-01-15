@@ -35,7 +35,7 @@ export class GuestbookCaptureCycle {
     mediaHeight: number;
     aspectRatio: number;
   };
-  @Prop() countdownInt?: number;
+  @State() countdownInt?: number;
 
   @Element() rootElement: HTMLElement | undefined;
   videoElement: HTMLVideoElement | undefined;
@@ -73,10 +73,19 @@ export class GuestbookCaptureCycle {
     const nums = Array(diff + 1)
       .fill(undefined)
       .map((_, j) => start + (direction === 'negative' ? -1 : 1) * j);
+
     for (const num of nums) {
       this.countdownInt = num;
       await delay(1000);
     }
+    return;
+  }
+  @Method() async clearCountdown() {
+    this.countdownInt = undefined;
+    return;
+  }
+  @Method() async setCountdownInt(num: number) {
+    this.countdownInt = num;
     return;
   }
 
@@ -85,6 +94,7 @@ export class GuestbookCaptureCycle {
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div style={{ height: '37vh', width: `${37 * this.mediaDimensions.aspectRatio}vh`, position: 'relative' }}>
           {typeof this.countdownInt === 'number' && <div class="countdownIntCircle">{this.countdownInt}</div>}
+
           <div id="flash" ref={elm => (this.flashElement = elm)} onAnimationEnd={() => this.onFlashEnd()} class={this.isFlash ? 'flash' : ''}></div>
           <video
             ref={elm => (this.videoElement = elm)}

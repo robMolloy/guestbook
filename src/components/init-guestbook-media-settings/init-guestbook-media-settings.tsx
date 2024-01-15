@@ -49,6 +49,7 @@ export class initGuestbookMediaSettings {
   @Prop() aspectRatio!: number;
   @State() status: 'loading' | 'gettingDefaultDeviceOrientation' | 'gettingMaxVideoDimensions' | 'error' = 'loading';
   @Element() rootElement?: HTMLElement;
+  videoElement: HTMLVideoElement | undefined;
 
   @Event({ eventName: 'initSettingsError' })
   initSettingsError?: EventEmitter<string>;
@@ -67,7 +68,7 @@ export class initGuestbookMediaSettings {
   }>;
 
   onComponentDidLoad = async () => {
-    const videoElement = this.rootElement?.shadowRoot?.querySelector('video');
+    const videoElement = this.videoElement;
     if (videoElement?.srcObject === undefined) return this.emitInitSettingsError('cannot find video element');
 
     this.status = 'gettingDefaultDeviceOrientation';
@@ -94,7 +95,7 @@ export class initGuestbookMediaSettings {
       <div>
         {this.status}
         <div>
-          <video style={{ border: 'solid 1px red' }} autoPlay></video>
+          <video ref={elm => (this.videoElement = elm)} style={{ border: 'solid 1px red' }} autoPlay></video>
         </div>
       </div>
     );
