@@ -1,7 +1,10 @@
 import { Component, Element, Event, h, State, EventEmitter, Prop } from '@stencil/core';
+import { getImageDataUrlFromVideoElement } from '../../utils/imageDataUrlUtils';
 
 const getDefaultDeviceOrientation = async (p: { videoElement: HTMLVideoElement }) => {
-  const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { aspectRatio: 2, width: { ideal: 100 } } });
+  const mediaStream = await navigator.mediaDevices.getUserMedia({
+    video: { aspectRatio: 2, width: { ideal: 100 } },
+  });
 
   p.videoElement.srcObject = mediaStream;
   const { width, height } = p.videoElement.getBoundingClientRect();
@@ -12,11 +15,17 @@ const getDefaultDeviceOrientation = async (p: { videoElement: HTMLVideoElement }
   return defaultDeviceOrientation;
 };
 
-const getMaxVideoDimensions = async (p: { isConventionalDeviceOrientation: boolean; aspectRatio: number; ideal: number }) => {
+const getMaxVideoDimensions = async (p: {
+  isConventionalDeviceOrientation: boolean;
+  aspectRatio: number;
+  ideal: number;
+}) => {
   const widthKey = p.isConventionalDeviceOrientation ? 'width' : 'height';
   const heightKey = p.isConventionalDeviceOrientation ? 'height' : 'width';
 
-  const constraints = { video: { [widthKey]: { ideal: p.ideal }, [heightKey]: { ideal: p.ideal } } } as const;
+  const constraints = {
+    video: { [widthKey]: { ideal: p.ideal }, [heightKey]: { ideal: p.ideal } },
+  } as const;
   const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
 
   const mediaStreamTrack = mediaStream.getVideoTracks().find(x => !!x);
@@ -47,7 +56,11 @@ const getMaxVideoDimensions = async (p: { isConventionalDeviceOrientation: boole
 export class initGuestbookMediaSettings {
   @Prop() idealWidth!: number;
   @Prop() aspectRatio!: number;
-  @State() status: 'loading' | 'gettingDefaultDeviceOrientation' | 'gettingMaxVideoDimensions' | 'error' = 'loading';
+  @State() status:
+    | 'loading'
+    | 'gettingDefaultDeviceOrientation'
+    | 'gettingMaxVideoDimensions'
+    | 'error' = 'loading';
   @Element() rootElement?: HTMLElement;
   videoElement: HTMLVideoElement | undefined;
 
@@ -65,11 +78,13 @@ export class initGuestbookMediaSettings {
     mediaWidth: number;
     mediaHeight: number;
     aspectRatio: number;
+    imageDataUrlLength?: number;
   }>;
 
   onComponentDidLoad = async () => {
     const videoElement = this.videoElement;
-    if (videoElement?.srcObject === undefined) return this.emitInitSettingsError('cannot find video element');
+    if (videoElement?.srcObject === undefined)
+      return this.emitInitSettingsError('cannot find video element');
 
     this.status = 'gettingDefaultDeviceOrientation';
     const defaultDeviceOrientation = await getDefaultDeviceOrientation({ videoElement });
@@ -81,9 +96,15 @@ export class initGuestbookMediaSettings {
       aspectRatio: this.aspectRatio,
     });
 
-    if (maxVideoDimensions === undefined) return this.emitInitSettingsError('cannot get maxVideoDimensions');
+    if (maxVideoDimensions === undefined)
+      return this.emitInitSettingsError('cannot get maxVideoDimensions');
 
-    if (this.initSettingsComplete) this.initSettingsComplete.emit(maxVideoDimensions);
+    const imageDataUrl = getImageDataUrlFromVideoElement({ videoElement });
+    if (this.initSettingsComplete)
+      this.initSettingsComplete.emit({
+        ...maxVideoDimensions,
+        imageDataUrlLength: imageDataUrl?.length,
+      });
   };
 
   componentDidLoad() {
@@ -95,7 +116,11 @@ export class initGuestbookMediaSettings {
       <div>
         {this.status}
         <div>
-          <video ref={elm => (this.videoElement = elm)} style={{ border: 'solid 1px red' }} autoPlay></video>
+          <video
+            ref={elm => (this.videoElement = elm)}
+            style={{ border: 'solid 1px red' }}
+            autoPlay
+          ></video>
         </div>
       </div>
     );

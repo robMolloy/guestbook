@@ -22,7 +22,6 @@ export class DisplayPhotoGrid {
   render() {
     return (
       <div class="capture-canvases-container">
-        {/* {JSON.stringify(this.imageDataUrls)} */}
         {[0, 1, 2, 3].map(x => {
           return (
             <span class="capture-canvas" style={{ backgroundImage: `url('${this.imageDataUrls?.[x]}')` }}>

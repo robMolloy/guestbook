@@ -1,4 +1,5 @@
 import { Component, Element, h, Prop, Method, State } from '@stencil/core';
+import { getImageDataUrlFromVideoElement } from '../../utils/imageDataUrlUtils';
 
 const delay = async (x: number) => {
   return new Promise(resolve => {
@@ -6,57 +7,12 @@ const delay = async (x: number) => {
   });
 };
 
-const getImageDataUrlFromVideoElement = (p: { videoElement: HTMLVideoElement }) => {
-  const canvas = document.createElement('canvas');
-
-  const width = true ? p.videoElement.videoWidth : 1080;
-  const height = true ? p.videoElement.videoHeight : 720;
-
-  // canvas.width = p.videoElement.width;
-  // canvas.height = p.videoElement.height;
-  canvas.width = width;
-  canvas.height = height;
-
-  console.log({ videoElement: p.videoElement, canvas });
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-  ctx.scale(-1, 1);
-  ctx.drawImage(p.videoElement, -width, 0, width, height);
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-  const imageDataUrl = canvas.toDataURL('image/png');
-  canvas.remove();
-  return imageDataUrl;
-};
-const getImageDataUrlFromWidthHeightAndVideoElement = (p: { videoElement: HTMLVideoElement; width: number; height: number }) => {
-  const canvas = document.createElement('canvas');
-
-  const width = false ? p.videoElement.width : p.width;
-  const height = false ? p.videoElement.height : p.height;
-
-  // canvas.width = p.videoElement.width;
-  // canvas.height = p.videoElement.height;
-  canvas.width = width;
-  canvas.height = height;
-
-  console.log({ videoElement: p.videoElement, canvas });
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-  ctx.scale(-1, 1);
-  ctx.drawImage(p.videoElement, -width, 0, width, height);
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-  const imageDataUrl = canvas.toDataURL('image/png');
-  canvas.remove();
-  return imageDataUrl;
-};
-
 @Component({
-  tag: 'guestbook-capture-cycle',
+  tag: 'display-stream',
   shadow: true,
-  styleUrls: ['./capture-countdown-screen.css'],
+  styleUrls: ['./display-stream.css'],
 })
-export class GuestbookCaptureCycle {
+export class DisplayStream {
   @Prop() mediaDimensions!: {
     videoElementWidth: number;
     videoElementHeight: number;
@@ -96,11 +52,6 @@ export class GuestbookCaptureCycle {
     const imageDataUrlFromVideoElement = getImageDataUrlFromVideoElement({
       videoElement: this.videoElement,
     });
-    // const imageDataUrlFromVideoElement = getImageDataUrlFromWidthHeightAndVideoElement({
-    //   videoElement: this.videoElement,
-    //   width: this.mediaDimensions.videoElementWidth,
-    //   height: this.mediaDimensions.videoElementHeight,
-    // });
     return imageDataUrlFromVideoElement;
   }
   @Method() async countdown({ start, stop, clear = false }: { start: number; stop: number; clear: boolean }) {

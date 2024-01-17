@@ -10,7 +10,7 @@ export namespace Components {
         "addImageDataUrls": (newImageDataUrls: string) => Promise<void>;
         "clearImageDataUrls": () => Promise<void>;
     }
-    interface GuestbookCaptureCycle {
+    interface DisplayStream {
         "capture": () => Promise<string | undefined>;
         "countdown": ({ start, stop, clear }: { start: number; stop: number; clear: boolean; }) => Promise<void>;
         "mediaDimensions": {
@@ -55,11 +55,11 @@ declare global {
         prototype: HTMLDisplayPhotoGridElement;
         new (): HTMLDisplayPhotoGridElement;
     };
-    interface HTMLGuestbookCaptureCycleElement extends Components.GuestbookCaptureCycle, HTMLStencilElement {
+    interface HTMLDisplayStreamElement extends Components.DisplayStream, HTMLStencilElement {
     }
-    var HTMLGuestbookCaptureCycleElement: {
-        prototype: HTMLGuestbookCaptureCycleElement;
-        new (): HTMLGuestbookCaptureCycleElement;
+    var HTMLDisplayStreamElement: {
+        prototype: HTMLDisplayStreamElement;
+        new (): HTMLDisplayStreamElement;
     };
     interface HTMLInitGuestbookMediaSettingsElementEventMap {
         "initSettingsError": string;
@@ -69,6 +69,7 @@ declare global {
     mediaWidth: number;
     mediaHeight: number;
     aspectRatio: number;
+    imageDataUrlLength?: number;
   };
     }
     interface HTMLInitGuestbookMediaSettingsElement extends Components.InitGuestbookMediaSettings, HTMLStencilElement {
@@ -105,7 +106,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "display-photo-grid": HTMLDisplayPhotoGridElement;
-        "guestbook-capture-cycle": HTMLGuestbookCaptureCycleElement;
+        "display-stream": HTMLDisplayStreamElement;
         "init-guestbook-media-settings": HTMLInitGuestbookMediaSettingsElement;
         "my-component": HTMLMyComponentElement;
         "root-component": HTMLRootComponentElement;
@@ -115,7 +116,7 @@ declare global {
 declare namespace LocalJSX {
     interface DisplayPhotoGrid {
     }
-    interface GuestbookCaptureCycle {
+    interface DisplayStream {
         "mediaDimensions": {
     videoElementWidth: number;
     videoElementHeight: number;
@@ -133,6 +134,7 @@ declare namespace LocalJSX {
     mediaWidth: number;
     mediaHeight: number;
     aspectRatio: number;
+    imageDataUrlLength?: number;
   }>) => void;
         "onInitSettingsError"?: (event: InitGuestbookMediaSettingsCustomEvent<string>) => void;
     }
@@ -156,7 +158,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "display-photo-grid": DisplayPhotoGrid;
-        "guestbook-capture-cycle": GuestbookCaptureCycle;
+        "display-stream": DisplayStream;
         "init-guestbook-media-settings": InitGuestbookMediaSettings;
         "my-component": MyComponent;
         "root-component": RootComponent;
@@ -168,7 +170,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "display-photo-grid": LocalJSX.DisplayPhotoGrid & JSXBase.HTMLAttributes<HTMLDisplayPhotoGridElement>;
-            "guestbook-capture-cycle": LocalJSX.GuestbookCaptureCycle & JSXBase.HTMLAttributes<HTMLGuestbookCaptureCycleElement>;
+            "display-stream": LocalJSX.DisplayStream & JSXBase.HTMLAttributes<HTMLDisplayStreamElement>;
             "init-guestbook-media-settings": LocalJSX.InitGuestbookMediaSettings & JSXBase.HTMLAttributes<HTMLInitGuestbookMediaSettingsElement>;
             "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
             "root-component": LocalJSX.RootComponent & JSXBase.HTMLAttributes<HTMLRootComponentElement>;

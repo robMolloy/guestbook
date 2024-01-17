@@ -1,4 +1,5 @@
 import { Component, Element, h, Listen, State } from '@stencil/core';
+import { createImageDataUrlItem } from '../../utils/firestore';
 
 const delay = async (x: number) => {
   return new Promise(resolve => {
@@ -17,8 +18,11 @@ export class SmartGuestbookCaptureCycle {
     mediaWidth: number;
     mediaHeight: number;
     aspectRatio: number;
+    imageDataUrlLength: number;
   };
   @Element() rootElement?: HTMLElement;
+  displayStreamElement?: HTMLDisplayStreamElement;
+  displayPhotoGridElement?: HTMLDisplayPhotoGridElement;
 
   @Listen('initSettingsComplete') handleInitSettingsComplete(
     event: CustomEvent<{
@@ -27,6 +31,7 @@ export class SmartGuestbookCaptureCycle {
       mediaWidth: number;
       mediaHeight: number;
       aspectRatio: number;
+      imageDataUrlLength: number;
     }>,
   ) {
     console.log('initSettingsComplete', event.detail);
@@ -39,41 +44,62 @@ export class SmartGuestbookCaptureCycle {
     console.log('initSettingsComplete', event);
   }
 
-  async handleTestClick() {
-    const elm = this.rootElement?.shadowRoot?.querySelector('guestbook-capture-cycle');
-    const displayPhotoGrid = this.rootElement?.shadowRoot?.querySelector('display-photo-grid');
-    if (!elm) return;
-    await elm?.countdown({ start: 3, stop: 0, clear: true });
+  async startCaptureCycle() {
+    const displayStreamElement = this.rootElement?.shadowRoot?.querySelector('display-stream');
+    const displayPhotoGridElement =
+      this.rootElement?.shadowRoot?.querySelector('display-photo-grid');
+    if (!displayStreamElement || !displayPhotoGridElement) return;
+    await displayStreamElement?.countdown({ start: 1, stop: 0, clear: true });
 
-    const resp2 = await elm?.capture();
-    if (resp2) await displayPhotoGrid?.addImageDataUrls(resp2);
-    await delay(2000);
-    console.log(`smart-guestbook-capture-cycle.tsx:${/*LL*/ 39}`, { resp2, resp2Length: resp2?.length });
+    for (const _ of [0, 1, 2, 3]) {
+      const imageDataUrl = await displayStreamElement?.capture();
+      if (!imageDataUrl) return;
+
+      await displayPhotoGridElement?.addImageDataUrls(imageDataUrl);
+      createImageDataUrlItem({ imageDataUrl });
+
+      await delay(2000);
+    }
   }
 
   render() {
     return (
-      <div onClick={() => this.handleTestClick()}>
+      <div onClick={() => this.startCaptureCycle()}>
         {this.status}
-        {this.status === 'loading' && <init-guestbook-media-settings idealWidth={1080} aspectRatio={6 / 4} />}
+        {this.status === 'loading' && (
+          <init-guestbook-media-settings idealWidth={1080} aspectRatio={6 / 4} />
+        )}
         {this.status === 'ready' && !!this.mediaDimensions && (
           <div>
-            <guestbook-capture-cycle
+            <display-stream
               mediaDimensions={{
                 mediaHeight: this.mediaDimensions.mediaHeight / 1.4,
                 mediaWidth: this.mediaDimensions.mediaWidth / 1.4,
                 videoElementHeight: this.mediaDimensions.videoElementHeight / 1.4,
-                videoElementWidth: this.mediaDimensions.videoElementWidth / 1.4,
                 aspectRatio: this.mediaDimensions.aspectRatio,
+                videoElementWidth: this.mediaDimensions.videoElementWidth / 1.4,
               }}
+              ref={elm => (this.displayStreamElement = elm)}
             />
-            <div style={{ height: '50vh', display: 'flex', flexDirection: 'column', border: 'solid 1px red' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', padding: '20px', gap: '20px' }}>
+            <div
+              style={{
+                height: '50vh',
+                display: 'flex',
+                flexDirection: 'column',
+                border: 'solid 1px red',
+              }}
+            >
+              <div
+                style={{ display: 'flex', justifyContent: 'center', padding: '20px', gap: '20px' }}
+              >
                 <button>click me</button>
                 <button>click me2</button>
               </div>
               <div style={{ flex: '1' }}>
-                <display-photo-grid></display-photo-grid>
+                <display-photo-grid
+                  ref={elm => (this.displayPhotoGridElement = elm)}
+                  style={{ display: 'none' }}
+                ></display-photo-grid>
               </div>
             </div>
           </div>
