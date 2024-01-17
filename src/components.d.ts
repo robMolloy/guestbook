@@ -7,11 +7,12 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface DisplayPhotoGrid {
+        "addImageDataUrls": (newImageDataUrls: string) => Promise<void>;
+        "clearImageDataUrls": () => Promise<void>;
     }
     interface GuestbookCaptureCycle {
         "capture": () => Promise<string | undefined>;
-        "clearCountdown": () => Promise<void>;
-        "countdown": (start: number, stop: number) => Promise<void>;
+        "countdown": ({ start, stop, clear }: { start: number; stop: number; clear: boolean; }) => Promise<void>;
         "mediaDimensions": {
     videoElementWidth: number;
     videoElementHeight: number;
@@ -19,7 +20,6 @@ export namespace Components {
     mediaHeight: number;
     aspectRatio: number;
   };
-        "setCountdownInt": (num: number) => Promise<void>;
     }
     interface InitGuestbookMediaSettings {
         "aspectRatio": number;

@@ -1,0 +1,6 @@
+{
+  "hosting": {
+    "site": "open-guestbook",
+    "public": "./www"
+  }
+}

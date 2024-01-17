@@ -23,10 +23,12 @@
     "start": "stencil build --dev --watch --serve",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
+    "firebase:deploy": "firebase deploy --only hosting:open-guestbook",
     "generate": "stencil generate"
   },
   "dependencies": {
-    "@stencil/core": "^4.7.0"
+    "@stencil/core": "^4.7.0",
+    "firebase": "^10.7.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.6",

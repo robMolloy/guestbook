@@ -8,13 +8,42 @@ const delay = async (x: number) => {
 
 const getImageDataUrlFromVideoElement = (p: { videoElement: HTMLVideoElement }) => {
   const canvas = document.createElement('canvas');
-  canvas.width = p.videoElement.width;
-  canvas.height = p.videoElement.height;
 
+  const width = true ? p.videoElement.videoWidth : 1080;
+  const height = true ? p.videoElement.videoHeight : 720;
+
+  // canvas.width = p.videoElement.width;
+  // canvas.height = p.videoElement.height;
+  canvas.width = width;
+  canvas.height = height;
+
+  console.log({ videoElement: p.videoElement, canvas });
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   ctx.scale(-1, 1);
-  ctx.drawImage(p.videoElement, -p.videoElement.width, 0, p.videoElement.width, p.videoElement.height);
+  ctx.drawImage(p.videoElement, -width, 0, width, height);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+  const imageDataUrl = canvas.toDataURL('image/png');
+  canvas.remove();
+  return imageDataUrl;
+};
+const getImageDataUrlFromWidthHeightAndVideoElement = (p: { videoElement: HTMLVideoElement; width: number; height: number }) => {
+  const canvas = document.createElement('canvas');
+
+  const width = false ? p.videoElement.width : p.width;
+  const height = false ? p.videoElement.height : p.height;
+
+  // canvas.width = p.videoElement.width;
+  // canvas.height = p.videoElement.height;
+  canvas.width = width;
+  canvas.height = height;
+
+  console.log({ videoElement: p.videoElement, canvas });
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  ctx.scale(-1, 1);
+  ctx.drawImage(p.videoElement, -width, 0, width, height);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
 
   const imageDataUrl = canvas.toDataURL('image/png');
@@ -64,10 +93,17 @@ export class GuestbookCaptureCycle {
   @Method() async capture() {
     if (!this.videoElement) return;
     this.flash();
-    const imageDataUrlFromVideoElement = getImageDataUrlFromVideoElement({ videoElement: this.videoElement });
+    const imageDataUrlFromVideoElement = getImageDataUrlFromVideoElement({
+      videoElement: this.videoElement,
+    });
+    // const imageDataUrlFromVideoElement = getImageDataUrlFromWidthHeightAndVideoElement({
+    //   videoElement: this.videoElement,
+    //   width: this.mediaDimensions.videoElementWidth,
+    //   height: this.mediaDimensions.videoElementHeight,
+    // });
     return imageDataUrlFromVideoElement;
   }
-  @Method() async countdown(start: number, stop: number) {
+  @Method() async countdown({ start, stop, clear = false }: { start: number; stop: number; clear: boolean }) {
     const diff = Math.abs(start - stop);
     const direction = start > stop ? 'negative' : 'positve';
     const nums = Array(diff + 1)
@@ -78,14 +114,11 @@ export class GuestbookCaptureCycle {
       this.countdownInt = num;
       await delay(1000);
     }
+    if (clear) this.clearCountdown();
     return;
   }
-  @Method() async clearCountdown() {
+  clearCountdown() {
     this.countdownInt = undefined;
-    return;
-  }
-  @Method() async setCountdownInt(num: number) {
-    this.countdownInt = num;
     return;
   }
 
