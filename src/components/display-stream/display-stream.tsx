@@ -30,7 +30,10 @@ export class DisplayStream {
 
   onComponentDidLoad = async () => {
     const mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: { width: { ideal: this.mediaDimensions?.mediaWidth }, height: { ideal: this.mediaDimensions?.mediaHeight } },
+      video: {
+        width: { ideal: this.mediaDimensions?.mediaWidth },
+        height: { ideal: this.mediaDimensions?.mediaHeight },
+      },
     });
 
     if (!!this.videoElement) this.videoElement.srcObject = mediaStream;
@@ -54,7 +57,9 @@ export class DisplayStream {
     });
     return imageDataUrlFromVideoElement;
   }
-  @Method() async countdown({ start, stop, clear = false }: { start: number; stop: number; clear: boolean }) {
+  @Method() async countdown(p: { start: number; stop: number; clear: boolean }) {
+    const { start, stop, clear = false } = p;
+
     const diff = Math.abs(start - stop);
     const direction = start > stop ? 'negative' : 'positve';
     const nums = Array(diff + 1)
@@ -76,10 +81,23 @@ export class DisplayStream {
   render() {
     return (
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <div style={{ height: '37vh', width: `${37 * this.mediaDimensions.aspectRatio}vh`, position: 'relative' }}>
-          {typeof this.countdownInt === 'number' && <div class="countdownIntCircle">{this.countdownInt}</div>}
+        <div
+          style={{
+            height: '37vh',
+            width: `${37 * this.mediaDimensions.aspectRatio}vh`,
+            position: 'relative',
+          }}
+        >
+          {typeof this.countdownInt === 'number' && (
+            <div class="countdownIntCircle">{this.countdownInt}</div>
+          )}
 
-          <div id="flash" ref={elm => (this.flashElement = elm)} onAnimationEnd={() => this.onFlashEnd()} class={this.isFlash ? 'flash' : ''}></div>
+          <div
+            id="flash"
+            ref={elm => (this.flashElement = elm)}
+            onAnimationEnd={() => this.onFlashEnd()}
+            class={this.isFlash ? 'flash' : ''}
+          ></div>
           <video
             ref={elm => (this.videoElement = elm)}
             style={{ transform: 'scaleX(-1)', height: '100%', width: '100%' }}

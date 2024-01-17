@@ -3,10 +3,11 @@ import { db } from '../config/firebase-config';
 import { z } from 'zod';
 import { v4 as uuid } from 'uuid';
 
-const imageDataUrlItemSchema = z.object({
+const backupImageDataUrlItemSchema = z.object({
   imageDataUrl: z.string(),
+  groupId: z.string(),
 });
-type TImageDataUrlItem = z.infer<typeof imageDataUrlItemSchema>;
+type TBackupImageDataUrlItem = z.infer<typeof backupImageDataUrlItemSchema>;
 
 export const readBackupImageDataUrlItemById = async (id: string) => {
   const docRef = doc(db, 'backupImageDataUrls', id);
@@ -14,31 +15,31 @@ export const readBackupImageDataUrlItemById = async (id: string) => {
 
   if (!docSnap.exists()) return;
 
-  const parseResponse = imageDataUrlItemSchema.safeParse(docSnap.data());
+  const parseResponse = backupImageDataUrlItemSchema.safeParse(docSnap.data());
   if (!parseResponse.success) return;
   return { id, ...parseResponse.data };
 };
 export const readAllBackupImageDataUrlItems = async () => {
-  const items: TImageDataUrlItem[] = [];
+  const items: TBackupImageDataUrlItem[] = [];
   const querySnapshot = await getDocs(collection(db, 'backupImageDataUrls'));
 
   return new Promise(resolve => {
     querySnapshot.forEach(doc => {
-      const parseResponse = imageDataUrlItemSchema.safeParse(doc.data());
+      const parseResponse = backupImageDataUrlItemSchema.safeParse(doc.data());
       if (parseResponse.success) items.push(parseResponse.data);
     });
     resolve(items);
   });
 };
 
-export const createImageDataUrlItem = async (item: TImageDataUrlItem) => {
+export const createBackupImageDataUrlItem = async (item: TBackupImageDataUrlItem) => {
   const id = uuid();
   await setDoc(doc(db, 'backupImageDataUrls', id), { ...item });
   return { id, ...item };
 };
 
-export const confirmCreateImageDataUrlItem = async (item: TImageDataUrlItem) => {
-  const { id } = await createImageDataUrlItem(item);
+export const confirmCreateImageDataUrlItem = async (item: TBackupImageDataUrlItem) => {
+  const { id } = await createBackupImageDataUrlItem(item);
   const newItem = await readBackupImageDataUrlItemById(id);
   return newItem;
 };

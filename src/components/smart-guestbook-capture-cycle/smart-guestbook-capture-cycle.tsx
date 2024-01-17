@@ -1,5 +1,6 @@
 import { Component, Element, h, Listen, State } from '@stencil/core';
-import { createImageDataUrlItem } from '../../utils/firestore';
+import { createBackupImageDataUrlItem as createBackupImageDataUrlItem } from '../../utils/firestore';
+import { v4 as uuid } from 'uuid';
 
 const delay = async (x: number) => {
   return new Promise(resolve => {
@@ -11,7 +12,7 @@ const delay = async (x: number) => {
   shadow: true,
 })
 export class SmartGuestbookCaptureCycle {
-  @State() status: 'loading' | 'error' | 'ready' = 'loading';
+  @State() status: 'loading' | 'error' | 'ready' | 'capturing' | 'selecting' = 'loading';
   @State() mediaDimensions?: {
     videoElementWidth: number;
     videoElementHeight: number;
@@ -38,39 +39,48 @@ export class SmartGuestbookCaptureCycle {
     this.mediaDimensions = { ...event.detail };
     this.status = 'ready';
   }
-  @State() countdownInt?: number = undefined;
   @Listen('initSettingsError')
   handleClick(event: any) {
     console.log('initSettingsComplete', event);
   }
+  @Listen('selectPhoto')
+  selectPhoto(event: CustomEvent<string>) {
+    console.log('selectPhoto', event.detail);
+  }
 
   async startCaptureCycle() {
-    const displayStreamElement = this.rootElement?.shadowRoot?.querySelector('display-stream');
-    const displayPhotoGridElement =
-      this.rootElement?.shadowRoot?.querySelector('display-photo-grid');
-    if (!displayStreamElement || !displayPhotoGridElement) return;
-    await displayStreamElement?.countdown({ start: 1, stop: 0, clear: true });
+    this.status = 'capturing';
+
+    if (!this.displayStreamElement) return;
+    await this.displayStreamElement?.countdown({ start: 1, stop: 0, clear: true });
+
+    const groupId = uuid();
 
     for (const _ of [0, 1, 2, 3]) {
-      const imageDataUrl = await displayStreamElement?.capture();
-      if (!imageDataUrl) return;
+      const imageDataUrl = await this.displayStreamElement?.capture();
+      if (!imageDataUrl || !this.displayPhotoGridElement) return;
 
-      await displayPhotoGridElement?.addImageDataUrls(imageDataUrl);
-      createImageDataUrlItem({ imageDataUrl });
+      await this.displayPhotoGridElement.addImageDataUrls(imageDataUrl);
+      createBackupImageDataUrlItem({ imageDataUrl, groupId });
 
       await delay(2000);
     }
+    this.status = 'selecting';
   }
 
   render() {
+    if (this.status === 'loading')
+      return <init-stream-settings idealWidth={1080} aspectRatio={6 / 4} />;
+
     return (
-      <div onClick={() => this.startCaptureCycle()}>
-        {this.status}
-        {this.status === 'loading' && (
-          <init-guestbook-media-settings idealWidth={1080} aspectRatio={6 / 4} />
-        )}
-        {this.status === 'ready' && !!this.mediaDimensions && (
-          <div>
+      <div
+        onClick={() => {
+          if (this.status === 'ready') this.startCaptureCycle();
+        }}
+      >
+        {(this.status === 'ready' || this.status === 'capturing') && !!this.mediaDimensions && (
+          <half-screen-section>
+            {this.status}
             <display-stream
               mediaDimensions={{
                 mediaHeight: this.mediaDimensions.mediaHeight / 1.4,
@@ -81,28 +91,19 @@ export class SmartGuestbookCaptureCycle {
               }}
               ref={elm => (this.displayStreamElement = elm)}
             />
-            <div
-              style={{
-                height: '50vh',
-                display: 'flex',
-                flexDirection: 'column',
-                border: 'solid 1px red',
-              }}
-            >
-              <div
-                style={{ display: 'flex', justifyContent: 'center', padding: '20px', gap: '20px' }}
-              >
-                <button>click me</button>
-                <button>click me2</button>
-              </div>
-              <div style={{ flex: '1' }}>
-                <display-photo-grid
-                  ref={elm => (this.displayPhotoGridElement = elm)}
-                  style={{ display: 'none' }}
-                ></display-photo-grid>
-              </div>
-            </div>
-          </div>
+            <button-container>
+              <button>click me</button>
+              <button>click me2</button>
+            </button-container>
+          </half-screen-section>
+        )}
+        {this.status === 'selecting' && <half-screen-section>asd</half-screen-section>}
+        {(this.status === 'capturing' || this.status === 'selecting') && (
+          <half-screen-section>
+            <display-photo-grid
+              ref={elm => (this.displayPhotoGridElement = elm)}
+            ></display-photo-grid>
+          </half-screen-section>
         )}
       </div>
     );

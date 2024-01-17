@@ -50,10 +50,10 @@ const getMaxVideoDimensions = async (p: {
 };
 
 @Component({
-  tag: 'init-guestbook-media-settings',
+  tag: 'init-stream-settings',
   shadow: true,
 })
-export class initGuestbookMediaSettings {
+export class initStreamSettings {
   @Prop() idealWidth!: number;
   @Prop() aspectRatio!: number;
   @State() status:
