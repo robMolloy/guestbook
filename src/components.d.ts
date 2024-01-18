@@ -8,9 +8,14 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface ButtonContainer {
     }
+    interface CustomH2 {
+    }
     interface DisplayPhotoGrid {
         "addImageDataUrls": (newImageDataUrls: string) => Promise<void>;
         "clearImageDataUrls": () => Promise<void>;
+    }
+    interface DisplaySelectedPhoto {
+        "selectedImageDataUrl"?: string;
     }
     interface DisplayStream {
         "capture": () => Promise<string | undefined>;
@@ -49,6 +54,12 @@ declare global {
         prototype: HTMLButtonContainerElement;
         new (): HTMLButtonContainerElement;
     };
+    interface HTMLCustomH2Element extends Components.CustomH2, HTMLStencilElement {
+    }
+    var HTMLCustomH2Element: {
+        prototype: HTMLCustomH2Element;
+        new (): HTMLCustomH2Element;
+    };
     interface HTMLDisplayPhotoGridElementEventMap {
         "selectPhoto": string;
     }
@@ -65,6 +76,12 @@ declare global {
     var HTMLDisplayPhotoGridElement: {
         prototype: HTMLDisplayPhotoGridElement;
         new (): HTMLDisplayPhotoGridElement;
+    };
+    interface HTMLDisplaySelectedPhotoElement extends Components.DisplaySelectedPhoto, HTMLStencilElement {
+    }
+    var HTMLDisplaySelectedPhotoElement: {
+        prototype: HTMLDisplaySelectedPhotoElement;
+        new (): HTMLDisplaySelectedPhotoElement;
     };
     interface HTMLDisplayStreamElement extends Components.DisplayStream, HTMLStencilElement {
     }
@@ -117,7 +134,9 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "button-container": HTMLButtonContainerElement;
+        "custom-h2": HTMLCustomH2Element;
         "display-photo-grid": HTMLDisplayPhotoGridElement;
+        "display-selected-photo": HTMLDisplaySelectedPhotoElement;
         "display-stream": HTMLDisplayStreamElement;
         "half-screen-section": HTMLHalfScreenSectionElement;
         "init-stream-settings": HTMLInitStreamSettingsElement;
@@ -128,8 +147,13 @@ declare global {
 declare namespace LocalJSX {
     interface ButtonContainer {
     }
+    interface CustomH2 {
+    }
     interface DisplayPhotoGrid {
         "onSelectPhoto"?: (event: DisplayPhotoGridCustomEvent<string>) => void;
+    }
+    interface DisplaySelectedPhoto {
+        "selectedImageDataUrl"?: string;
     }
     interface DisplayStream {
         "mediaDimensions": {
@@ -161,7 +185,9 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "button-container": ButtonContainer;
+        "custom-h2": CustomH2;
         "display-photo-grid": DisplayPhotoGrid;
+        "display-selected-photo": DisplaySelectedPhoto;
         "display-stream": DisplayStream;
         "half-screen-section": HalfScreenSection;
         "init-stream-settings": InitStreamSettings;
@@ -174,7 +200,9 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "button-container": LocalJSX.ButtonContainer & JSXBase.HTMLAttributes<HTMLButtonContainerElement>;
+            "custom-h2": LocalJSX.CustomH2 & JSXBase.HTMLAttributes<HTMLCustomH2Element>;
             "display-photo-grid": LocalJSX.DisplayPhotoGrid & JSXBase.HTMLAttributes<HTMLDisplayPhotoGridElement>;
+            "display-selected-photo": LocalJSX.DisplaySelectedPhoto & JSXBase.HTMLAttributes<HTMLDisplaySelectedPhotoElement>;
             "display-stream": LocalJSX.DisplayStream & JSXBase.HTMLAttributes<HTMLDisplayStreamElement>;
             "half-screen-section": LocalJSX.HalfScreenSection & JSXBase.HTMLAttributes<HTMLHalfScreenSectionElement>;
             "init-stream-settings": LocalJSX.InitStreamSettings & JSXBase.HTMLAttributes<HTMLInitStreamSettingsElement>;

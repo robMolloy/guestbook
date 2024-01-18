@@ -13,6 +13,7 @@ const delay = async (x: number) => {
 })
 export class SmartGuestbookCaptureCycle {
   @State() status: 'loading' | 'error' | 'ready' | 'capturing' | 'selecting' = 'loading';
+  @State() selectedImageDataUrl?: string = undefined;
   @State() mediaDimensions?: {
     videoElementWidth: number;
     videoElementHeight: number;
@@ -24,6 +25,7 @@ export class SmartGuestbookCaptureCycle {
   @Element() rootElement?: HTMLElement;
   displayStreamElement?: HTMLDisplayStreamElement;
   displayPhotoGridElement?: HTMLDisplayPhotoGridElement;
+  displaySelectedPhoto?: HTMLDisplaySelectedPhotoElement;
 
   @Listen('initSettingsComplete') handleInitSettingsComplete(
     event: CustomEvent<{
@@ -45,7 +47,8 @@ export class SmartGuestbookCaptureCycle {
   }
   @Listen('selectPhoto')
   selectPhoto(event: CustomEvent<string>) {
-    console.log('selectPhoto', event.detail);
+    console.log(`smart-guestbook-capture-cycle.tsx:${/*LL*/ 50}`, { click: 123 });
+    if (this.status === 'selecting') this.selectedImageDataUrl = event.detail;
   }
 
   async startCaptureCycle() {
@@ -74,13 +77,13 @@ export class SmartGuestbookCaptureCycle {
 
     return (
       <div
+        style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
         onClick={() => {
           if (this.status === 'ready') this.startCaptureCycle();
         }}
       >
         {(this.status === 'ready' || this.status === 'capturing') && !!this.mediaDimensions && (
-          <half-screen-section>
-            {this.status}
+          <div>
             <display-stream
               mediaDimensions={{
                 mediaHeight: this.mediaDimensions.mediaHeight / 1.4,
@@ -91,13 +94,21 @@ export class SmartGuestbookCaptureCycle {
               }}
               ref={elm => (this.displayStreamElement = elm)}
             />
-            <button-container>
-              <button>click me</button>
-              <button>click me2</button>
-            </button-container>
-          </half-screen-section>
+          </div>
         )}
-        {this.status === 'selecting' && <half-screen-section>asd</half-screen-section>}
+
+        {this.status === 'selecting' && (
+          <display-selected-photo
+            selectedImageDataUrl={this.selectedImageDataUrl}
+            ref={elm => (this.displaySelectedPhoto = elm)}
+          ></display-selected-photo>
+        )}
+        {this.status === 'selecting' && (
+          <button-container>
+            <button>click me</button>
+            <button>click me2</button>
+          </button-container>
+        )}
         {(this.status === 'capturing' || this.status === 'selecting') && (
           <half-screen-section>
             <display-photo-grid
