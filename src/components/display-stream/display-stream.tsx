@@ -1,11 +1,6 @@
 import { Component, Element, h, Prop, Method, State } from '@stencil/core';
 import { getImageDataUrlFromVideoElement } from '../../utils/imageDataUrlUtils';
-
-const delay = async (x: number) => {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(true), x);
-  });
-};
+import { delay } from '../../utils/timeUtils';
 
 @Component({
   tag: 'display-stream',

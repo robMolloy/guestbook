@@ -8,6 +8,8 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface ButtonContainer {
     }
+    interface CustomH1 {
+    }
     interface CustomH2 {
     }
     interface DisplayPhotoGrid {
@@ -53,6 +55,12 @@ declare global {
     var HTMLButtonContainerElement: {
         prototype: HTMLButtonContainerElement;
         new (): HTMLButtonContainerElement;
+    };
+    interface HTMLCustomH1Element extends Components.CustomH1, HTMLStencilElement {
+    }
+    var HTMLCustomH1Element: {
+        prototype: HTMLCustomH1Element;
+        new (): HTMLCustomH1Element;
     };
     interface HTMLCustomH2Element extends Components.CustomH2, HTMLStencilElement {
     }
@@ -134,6 +142,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "button-container": HTMLButtonContainerElement;
+        "custom-h1": HTMLCustomH1Element;
         "custom-h2": HTMLCustomH2Element;
         "display-photo-grid": HTMLDisplayPhotoGridElement;
         "display-selected-photo": HTMLDisplaySelectedPhotoElement;
@@ -146,6 +155,8 @@ declare global {
 }
 declare namespace LocalJSX {
     interface ButtonContainer {
+    }
+    interface CustomH1 {
     }
     interface CustomH2 {
     }
@@ -185,6 +196,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "button-container": ButtonContainer;
+        "custom-h1": CustomH1;
         "custom-h2": CustomH2;
         "display-photo-grid": DisplayPhotoGrid;
         "display-selected-photo": DisplaySelectedPhoto;
@@ -200,6 +212,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "button-container": LocalJSX.ButtonContainer & JSXBase.HTMLAttributes<HTMLButtonContainerElement>;
+            "custom-h1": LocalJSX.CustomH1 & JSXBase.HTMLAttributes<HTMLCustomH1Element>;
             "custom-h2": LocalJSX.CustomH2 & JSXBase.HTMLAttributes<HTMLCustomH2Element>;
             "display-photo-grid": LocalJSX.DisplayPhotoGrid & JSXBase.HTMLAttributes<HTMLDisplayPhotoGridElement>;
             "display-selected-photo": LocalJSX.DisplaySelectedPhoto & JSXBase.HTMLAttributes<HTMLDisplaySelectedPhotoElement>;

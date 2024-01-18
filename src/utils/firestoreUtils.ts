@@ -9,6 +9,46 @@ const backupImageDataUrlItemSchema = z.object({
 });
 type TBackupImageDataUrlItem = z.infer<typeof backupImageDataUrlItemSchema>;
 
+const selectedImageDataUrlItemSchema = z.object({
+  imageDataUrl: z.string(),
+});
+type TSelectedImageDataUrlItem = z.infer<typeof selectedImageDataUrlItemSchema>;
+
+export const readSelectedImageDataUrlItemById = async (id: string) => {
+  const docRef = doc(db, 'selectedImageDataUrls', id);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) return;
+
+  const parseResponse = selectedImageDataUrlItemSchema.safeParse(docSnap.data());
+  if (!parseResponse.success) return;
+  return { id, ...parseResponse.data };
+};
+export const readAllSelectedImageDataUrlItems = async () => {
+  const items: TSelectedImageDataUrlItem[] = [];
+  const querySnapshot = await getDocs(collection(db, 'selectedImageDataUrls'));
+
+  return new Promise(resolve => {
+    querySnapshot.forEach(doc => {
+      const parseResponse = selectedImageDataUrlItemSchema.safeParse(doc.data());
+      if (parseResponse.success) items.push(parseResponse.data);
+    });
+    resolve(items);
+  });
+};
+
+export const createSelectedImageDataUrlItem = async (item: TSelectedImageDataUrlItem) => {
+  const id = uuid();
+  await setDoc(doc(db, 'selectedImageDataUrls', id), { ...item });
+  return { id, ...item };
+};
+
+export const confirmCreateSelectedImageDataUrlItem = async (item: TSelectedImageDataUrlItem) => {
+  const { id } = await createSelectedImageDataUrlItem(item);
+  const newItem = await readSelectedImageDataUrlItemById(id);
+  return newItem;
+};
+
 export const readBackupImageDataUrlItemById = async (id: string) => {
   const docRef = doc(db, 'backupImageDataUrls', id);
   const docSnap = await getDoc(docRef);

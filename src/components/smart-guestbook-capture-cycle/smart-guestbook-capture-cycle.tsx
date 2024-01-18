@@ -1,15 +1,11 @@
 import { Component, h, Listen, State, Watch } from '@stencil/core';
-import { createBackupImageDataUrlItem as createBackupImageDataUrlItem } from '../../utils/firestore';
+import { createBackupImageDataUrlItem } from '../../utils/firestoreUtils';
 import { v4 as uuid } from 'uuid';
+import { delay } from '../../utils/timeUtils';
 
-const isRapid = true;
-const delay = async (x: number) => {
-  return new Promise(resolve => {
-    setTimeout(() => resolve(true), x / (isRapid ? 10 : 1));
-  });
-};
 @Component({
   tag: 'smart-guestbook-capture-cycle',
+  styleUrls: ['../../styles/daisyUi.css'],
   shadow: true,
 })
 export class SmartGuestbookCaptureCycle {
@@ -60,7 +56,7 @@ export class SmartGuestbookCaptureCycle {
     this.status = 'capturing';
 
     if (!this.displayStreamElement) return;
-    await this.displayStreamElement?.countdown({ start: 1, stop: 0, clear: true });
+    await this.displayStreamElement?.countdown({ start: 3, stop: 0, clear: true });
 
     const groupId = uuid();
 
@@ -82,11 +78,14 @@ export class SmartGuestbookCaptureCycle {
 
     return (
       <div
+        data-theme="cupcake"
         style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
         onClick={() => {
           if (this.status === 'ready') this.startCaptureCycle();
         }}
       >
+        <br />
+
         {(this.status === 'ready' || this.status === 'capturing') && !!this.mediaDimensions && (
           <div>
             <display-stream
@@ -106,12 +105,20 @@ export class SmartGuestbookCaptureCycle {
           <display-selected-photo
             selectedImageDataUrl={this.selectedImageDataUrl}
             ref={elm => (this.displaySelectedPhoto = elm)}
-          ></display-selected-photo>
+          />
         )}
         {this.status === 'selecting' && (
           <button-container>
-            <button>click me</button>
-            <button>click me2</button>
+            <button
+              class="btn btn-primary"
+              disabled={this.selectedImageDataUrl === undefined}
+              onClick={async () => {}}
+            >
+              Print photo
+            </button>
+            <button class="btn btn-accent" onClick={() => {}}>
+              Start again
+            </button>
           </button-container>
         )}
         {(this.status === 'capturing' || this.status === 'selecting') && (
@@ -119,7 +126,7 @@ export class SmartGuestbookCaptureCycle {
             <display-photo-grid ref={elm => (this.displayPhotoGridElement = elm)} />
           </div>
         )}
-        {(this.status === 'capturing' || this.status === 'selecting') && <br />}
+        <br />
       </div>
     );
   }
