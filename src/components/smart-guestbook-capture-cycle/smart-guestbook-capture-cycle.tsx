@@ -115,12 +115,11 @@ export class SmartGuestbookCaptureCycle {
           </button-container>
         )}
         {(this.status === 'capturing' || this.status === 'selecting') && (
-          <half-screen-section>
-            <display-photo-grid
-              ref={elm => (this.displayPhotoGridElement = elm)}
-            ></display-photo-grid>
-          </half-screen-section>
+          <div style={{ flex: '1' }}>
+            <display-photo-grid ref={elm => (this.displayPhotoGridElement = elm)} />
+          </div>
         )}
+        {(this.status === 'capturing' || this.status === 'selecting') && <br />}
       </div>
     );
   }
