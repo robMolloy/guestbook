@@ -1,10 +1,11 @@
-import { Component, Element, h, Listen, State } from '@stencil/core';
+import { Component, h, Listen, State, Watch } from '@stencil/core';
 import { createBackupImageDataUrlItem as createBackupImageDataUrlItem } from '../../utils/firestore';
 import { v4 as uuid } from 'uuid';
 
+const isRapid = true;
 const delay = async (x: number) => {
   return new Promise(resolve => {
-    setTimeout(() => resolve(true), x);
+    setTimeout(() => resolve(true), x / (isRapid ? 10 : 1));
   });
 };
 @Component({
@@ -22,7 +23,7 @@ export class SmartGuestbookCaptureCycle {
     aspectRatio: number;
     imageDataUrlLength: number;
   };
-  @Element() rootElement?: HTMLElement;
+
   displayStreamElement?: HTMLDisplayStreamElement;
   displayPhotoGridElement?: HTMLDisplayPhotoGridElement;
   displaySelectedPhoto?: HTMLDisplaySelectedPhotoElement;
@@ -47,8 +48,12 @@ export class SmartGuestbookCaptureCycle {
   }
   @Listen('selectPhoto')
   selectPhoto(event: CustomEvent<string>) {
-    console.log(`smart-guestbook-capture-cycle.tsx:${/*LL*/ 50}`, { click: 123 });
     if (this.status === 'selecting') this.selectedImageDataUrl = event.detail;
+  }
+
+  @Watch('status')
+  watchPropHandler() {
+    if (this.status === 'ready') this.selectedImageDataUrl = undefined;
   }
 
   async startCaptureCycle() {
