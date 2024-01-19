@@ -9,7 +9,15 @@ import { delay } from '../../utils/timeUtils';
   shadow: true,
 })
 export class SmartGuestbookCaptureCycle {
-  @State() status: 'loading' | 'error' | 'ready' | 'capturing' | 'selecting' = 'loading';
+  @State() status:
+    | 'loading'
+    | 'initError'
+    | 'error'
+    | 'success'
+    | 'preReady'
+    | 'ready'
+    | 'capturing'
+    | 'selecting' = 'loading';
   @State() selectedImageDataUrl?: string = undefined;
   @State() mediaDimensions?: {
     videoElementWidth: number;
@@ -36,7 +44,7 @@ export class SmartGuestbookCaptureCycle {
   ) {
     console.log('initSettingsComplete', event.detail);
     this.mediaDimensions = { ...event.detail };
-    this.status = 'ready';
+    this.status = 'preReady';
   }
   @Listen('initSettingsError')
   handleClick(event: any) {
@@ -49,7 +57,16 @@ export class SmartGuestbookCaptureCycle {
 
   @Watch('status')
   watchPropHandler() {
-    if (this.status === 'ready') this.selectedImageDataUrl = undefined;
+    if (this.status === 'preReady') {
+      this.selectedImageDataUrl = undefined;
+      // TODO: fix: setTimeout used to delay restart as it recognises the status ready click causing the start cycle
+      setTimeout(() => (this.status = 'ready'), 100);
+    }
+  }
+
+  async confirmPhoto() {
+    console.log(123);
+    this.status = 'success';
   }
 
   async startCaptureCycle() {
@@ -85,10 +102,12 @@ export class SmartGuestbookCaptureCycle {
         }}
       >
         <br />
+        <div>{this.status}</div>
 
         {(this.status === 'ready' || this.status === 'capturing') && !!this.mediaDimensions && (
           <div>
             <display-stream
+              ref={elm => (this.displayStreamElement = elm)}
               mediaDimensions={{
                 mediaHeight: this.mediaDimensions.mediaHeight / 1.4,
                 mediaWidth: this.mediaDimensions.mediaWidth / 1.4,
@@ -96,7 +115,6 @@ export class SmartGuestbookCaptureCycle {
                 aspectRatio: this.mediaDimensions.aspectRatio,
                 videoElementWidth: this.mediaDimensions.videoElementWidth / 1.4,
               }}
-              ref={elm => (this.displayStreamElement = elm)}
             />
           </div>
         )}
@@ -112,11 +130,18 @@ export class SmartGuestbookCaptureCycle {
             <button
               class="btn btn-primary"
               disabled={this.selectedImageDataUrl === undefined}
-              onClick={async () => {}}
+              onClick={async () => {
+                this.confirmPhoto();
+              }}
             >
-              Print photo
+              Choose photo
             </button>
-            <button class="btn btn-accent" onClick={() => {}}>
+            <button
+              class="btn btn-accent"
+              onClick={() => {
+                this.status = 'preReady';
+              }}
+            >
               Start again
             </button>
           </button-container>
@@ -124,6 +149,21 @@ export class SmartGuestbookCaptureCycle {
         {(this.status === 'capturing' || this.status === 'selecting') && (
           <div style={{ flex: '1' }}>
             <display-photo-grid ref={elm => (this.displayPhotoGridElement = elm)} />
+          </div>
+        )}
+
+        {this.status === 'success' && (
+          <div
+            style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <div>success</div>
+          </div>
+        )}
+        {this.status === 'error' && (
+          <div
+            style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <div>error</div>
           </div>
         )}
         <br />

@@ -30,6 +30,16 @@ export namespace Components {
     aspectRatio: number;
   };
     }
+    interface GuestbookCaptureCycle {
+        "mediaDimensions"?: {
+    videoElementWidth: number;
+    videoElementHeight: number;
+    mediaWidth: number;
+    mediaHeight: number;
+    aspectRatio: number;
+    imageDataUrlLength: number;
+  };
+    }
     interface HalfScreenSection {
     }
     interface InitStreamSettings {
@@ -97,6 +107,12 @@ declare global {
         prototype: HTMLDisplayStreamElement;
         new (): HTMLDisplayStreamElement;
     };
+    interface HTMLGuestbookCaptureCycleElement extends Components.GuestbookCaptureCycle, HTMLStencilElement {
+    }
+    var HTMLGuestbookCaptureCycleElement: {
+        prototype: HTMLGuestbookCaptureCycleElement;
+        new (): HTMLGuestbookCaptureCycleElement;
+    };
     interface HTMLHalfScreenSectionElement extends Components.HalfScreenSection, HTMLStencilElement {
     }
     var HTMLHalfScreenSectionElement: {
@@ -147,6 +163,7 @@ declare global {
         "display-photo-grid": HTMLDisplayPhotoGridElement;
         "display-selected-photo": HTMLDisplaySelectedPhotoElement;
         "display-stream": HTMLDisplayStreamElement;
+        "guestbook-capture-cycle": HTMLGuestbookCaptureCycleElement;
         "half-screen-section": HTMLHalfScreenSectionElement;
         "init-stream-settings": HTMLInitStreamSettingsElement;
         "root-component": HTMLRootComponentElement;
@@ -175,6 +192,16 @@ declare namespace LocalJSX {
     aspectRatio: number;
   };
     }
+    interface GuestbookCaptureCycle {
+        "mediaDimensions"?: {
+    videoElementWidth: number;
+    videoElementHeight: number;
+    mediaWidth: number;
+    mediaHeight: number;
+    aspectRatio: number;
+    imageDataUrlLength: number;
+  };
+    }
     interface HalfScreenSection {
     }
     interface InitStreamSettings {
@@ -201,6 +228,7 @@ declare namespace LocalJSX {
         "display-photo-grid": DisplayPhotoGrid;
         "display-selected-photo": DisplaySelectedPhoto;
         "display-stream": DisplayStream;
+        "guestbook-capture-cycle": GuestbookCaptureCycle;
         "half-screen-section": HalfScreenSection;
         "init-stream-settings": InitStreamSettings;
         "root-component": RootComponent;
@@ -217,6 +245,7 @@ declare module "@stencil/core" {
             "display-photo-grid": LocalJSX.DisplayPhotoGrid & JSXBase.HTMLAttributes<HTMLDisplayPhotoGridElement>;
             "display-selected-photo": LocalJSX.DisplaySelectedPhoto & JSXBase.HTMLAttributes<HTMLDisplaySelectedPhotoElement>;
             "display-stream": LocalJSX.DisplayStream & JSXBase.HTMLAttributes<HTMLDisplayStreamElement>;
+            "guestbook-capture-cycle": LocalJSX.GuestbookCaptureCycle & JSXBase.HTMLAttributes<HTMLGuestbookCaptureCycleElement>;
             "half-screen-section": LocalJSX.HalfScreenSection & JSXBase.HTMLAttributes<HTMLHalfScreenSectionElement>;
             "init-stream-settings": LocalJSX.InitStreamSettings & JSXBase.HTMLAttributes<HTMLInitStreamSettingsElement>;
             "root-component": LocalJSX.RootComponent & JSXBase.HTMLAttributes<HTMLRootComponentElement>;
