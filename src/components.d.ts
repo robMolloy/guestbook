@@ -41,24 +41,6 @@ export namespace Components {
     }
     interface CustomH2 {
     }
-    interface DisplayPhotoGrid {
-        "addImageDataUrls": (newImageDataUrls: string) => Promise<void>;
-        "clearImageDataUrls": () => Promise<void>;
-    }
-    interface DisplaySelectedPhoto {
-        "selectedImageDataUrl"?: string;
-    }
-    interface DisplayStream {
-        "capture": () => Promise<string | undefined>;
-        "countdown": (p: { start: number; stop: number; clear: boolean; delayInMs?: number | undefined; cb?: ((num: number) => Promise<any> | any) | undefined; }) => Promise<void>;
-        "mediaDimensions": {
-    videoElementWidth: number;
-    videoElementHeight: number;
-    mediaWidth: number;
-    mediaHeight: number;
-    aspectRatio: number;
-  };
-    }
     interface DumbCaptureCycle {
         "streamSettings": {
     videoElementWidth: number;
@@ -68,25 +50,9 @@ export namespace Components {
     aspectRatio: number;
   };
     }
-    interface GuestbookCaptureCycle {
-        "mediaDimensions"?: {
-    videoElementWidth: number;
-    videoElementHeight: number;
-    mediaWidth: number;
-    mediaHeight: number;
-    aspectRatio: number;
-    imageDataUrlLength: number;
-  };
-    }
     interface HalfScreenSection {
     }
-    interface InitStreamSettings {
-        "aspectRatio": number;
-        "idealWidth": number;
-    }
     interface RootComponent {
-    }
-    interface SmartGuestbookCaptureCycle {
     }
 }
 export interface CaptureCycleConfirmPhotoFailScreenCustomEvent<T> extends CustomEvent<T> {
@@ -104,14 +70,6 @@ export interface CaptureCycleDisplayPhotoGridCustomEvent<T> extends CustomEvent<
 export interface CaptureCycleGetStreamSettingsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCaptureCycleGetStreamSettingsElement;
-}
-export interface DisplayPhotoGridCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLDisplayPhotoGridElement;
-}
-export interface InitStreamSettingsCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLInitStreamSettingsElement;
 }
 declare global {
     interface HTMLButtonContainerElement extends Components.ButtonContainer, HTMLStencilElement {
@@ -226,46 +184,11 @@ declare global {
         prototype: HTMLCustomH2Element;
         new (): HTMLCustomH2Element;
     };
-    interface HTMLDisplayPhotoGridElementEventMap {
-        "selectPhoto": string;
-    }
-    interface HTMLDisplayPhotoGridElement extends Components.DisplayPhotoGrid, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLDisplayPhotoGridElementEventMap>(type: K, listener: (this: HTMLDisplayPhotoGridElement, ev: DisplayPhotoGridCustomEvent<HTMLDisplayPhotoGridElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLDisplayPhotoGridElementEventMap>(type: K, listener: (this: HTMLDisplayPhotoGridElement, ev: DisplayPhotoGridCustomEvent<HTMLDisplayPhotoGridElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-    }
-    var HTMLDisplayPhotoGridElement: {
-        prototype: HTMLDisplayPhotoGridElement;
-        new (): HTMLDisplayPhotoGridElement;
-    };
-    interface HTMLDisplaySelectedPhotoElement extends Components.DisplaySelectedPhoto, HTMLStencilElement {
-    }
-    var HTMLDisplaySelectedPhotoElement: {
-        prototype: HTMLDisplaySelectedPhotoElement;
-        new (): HTMLDisplaySelectedPhotoElement;
-    };
-    interface HTMLDisplayStreamElement extends Components.DisplayStream, HTMLStencilElement {
-    }
-    var HTMLDisplayStreamElement: {
-        prototype: HTMLDisplayStreamElement;
-        new (): HTMLDisplayStreamElement;
-    };
     interface HTMLDumbCaptureCycleElement extends Components.DumbCaptureCycle, HTMLStencilElement {
     }
     var HTMLDumbCaptureCycleElement: {
         prototype: HTMLDumbCaptureCycleElement;
         new (): HTMLDumbCaptureCycleElement;
-    };
-    interface HTMLGuestbookCaptureCycleElement extends Components.GuestbookCaptureCycle, HTMLStencilElement {
-    }
-    var HTMLGuestbookCaptureCycleElement: {
-        prototype: HTMLGuestbookCaptureCycleElement;
-        new (): HTMLGuestbookCaptureCycleElement;
     };
     interface HTMLHalfScreenSectionElement extends Components.HalfScreenSection, HTMLStencilElement {
     }
@@ -273,42 +196,11 @@ declare global {
         prototype: HTMLHalfScreenSectionElement;
         new (): HTMLHalfScreenSectionElement;
     };
-    interface HTMLInitStreamSettingsElementEventMap {
-        "initSettingsError": string;
-        "initSettingsComplete": {
-    videoElementWidth: number;
-    videoElementHeight: number;
-    mediaWidth: number;
-    mediaHeight: number;
-    aspectRatio: number;
-    imageDataUrlLength?: number;
-  };
-    }
-    interface HTMLInitStreamSettingsElement extends Components.InitStreamSettings, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLInitStreamSettingsElementEventMap>(type: K, listener: (this: HTMLInitStreamSettingsElement, ev: InitStreamSettingsCustomEvent<HTMLInitStreamSettingsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLInitStreamSettingsElementEventMap>(type: K, listener: (this: HTMLInitStreamSettingsElement, ev: InitStreamSettingsCustomEvent<HTMLInitStreamSettingsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-    }
-    var HTMLInitStreamSettingsElement: {
-        prototype: HTMLInitStreamSettingsElement;
-        new (): HTMLInitStreamSettingsElement;
-    };
     interface HTMLRootComponentElement extends Components.RootComponent, HTMLStencilElement {
     }
     var HTMLRootComponentElement: {
         prototype: HTMLRootComponentElement;
         new (): HTMLRootComponentElement;
-    };
-    interface HTMLSmartGuestbookCaptureCycleElement extends Components.SmartGuestbookCaptureCycle, HTMLStencilElement {
-    }
-    var HTMLSmartGuestbookCaptureCycleElement: {
-        prototype: HTMLSmartGuestbookCaptureCycleElement;
-        new (): HTMLSmartGuestbookCaptureCycleElement;
     };
     interface HTMLElementTagNameMap {
         "button-container": HTMLButtonContainerElement;
@@ -321,15 +213,9 @@ declare global {
         "capture-cycle-get-stream-settings": HTMLCaptureCycleGetStreamSettingsElement;
         "custom-h1": HTMLCustomH1Element;
         "custom-h2": HTMLCustomH2Element;
-        "display-photo-grid": HTMLDisplayPhotoGridElement;
-        "display-selected-photo": HTMLDisplaySelectedPhotoElement;
-        "display-stream": HTMLDisplayStreamElement;
         "dumb-capture-cycle": HTMLDumbCaptureCycleElement;
-        "guestbook-capture-cycle": HTMLGuestbookCaptureCycleElement;
         "half-screen-section": HTMLHalfScreenSectionElement;
-        "init-stream-settings": HTMLInitStreamSettingsElement;
         "root-component": HTMLRootComponentElement;
-        "smart-guestbook-capture-cycle": HTMLSmartGuestbookCaptureCycleElement;
     }
 }
 declare namespace LocalJSX {
@@ -376,21 +262,6 @@ declare namespace LocalJSX {
     }
     interface CustomH2 {
     }
-    interface DisplayPhotoGrid {
-        "onSelectPhoto"?: (event: DisplayPhotoGridCustomEvent<string>) => void;
-    }
-    interface DisplaySelectedPhoto {
-        "selectedImageDataUrl"?: string;
-    }
-    interface DisplayStream {
-        "mediaDimensions": {
-    videoElementWidth: number;
-    videoElementHeight: number;
-    mediaWidth: number;
-    mediaHeight: number;
-    aspectRatio: number;
-  };
-    }
     interface DumbCaptureCycle {
         "streamSettings": {
     videoElementWidth: number;
@@ -400,34 +271,9 @@ declare namespace LocalJSX {
     aspectRatio: number;
   };
     }
-    interface GuestbookCaptureCycle {
-        "mediaDimensions"?: {
-    videoElementWidth: number;
-    videoElementHeight: number;
-    mediaWidth: number;
-    mediaHeight: number;
-    aspectRatio: number;
-    imageDataUrlLength: number;
-  };
-    }
     interface HalfScreenSection {
     }
-    interface InitStreamSettings {
-        "aspectRatio": number;
-        "idealWidth": number;
-        "onInitSettingsComplete"?: (event: InitStreamSettingsCustomEvent<{
-    videoElementWidth: number;
-    videoElementHeight: number;
-    mediaWidth: number;
-    mediaHeight: number;
-    aspectRatio: number;
-    imageDataUrlLength?: number;
-  }>) => void;
-        "onInitSettingsError"?: (event: InitStreamSettingsCustomEvent<string>) => void;
-    }
     interface RootComponent {
-    }
-    interface SmartGuestbookCaptureCycle {
     }
     interface IntrinsicElements {
         "button-container": ButtonContainer;
@@ -440,15 +286,9 @@ declare namespace LocalJSX {
         "capture-cycle-get-stream-settings": CaptureCycleGetStreamSettings;
         "custom-h1": CustomH1;
         "custom-h2": CustomH2;
-        "display-photo-grid": DisplayPhotoGrid;
-        "display-selected-photo": DisplaySelectedPhoto;
-        "display-stream": DisplayStream;
         "dumb-capture-cycle": DumbCaptureCycle;
-        "guestbook-capture-cycle": GuestbookCaptureCycle;
         "half-screen-section": HalfScreenSection;
-        "init-stream-settings": InitStreamSettings;
         "root-component": RootComponent;
-        "smart-guestbook-capture-cycle": SmartGuestbookCaptureCycle;
     }
 }
 export { LocalJSX as JSX };
@@ -465,15 +305,9 @@ declare module "@stencil/core" {
             "capture-cycle-get-stream-settings": LocalJSX.CaptureCycleGetStreamSettings & JSXBase.HTMLAttributes<HTMLCaptureCycleGetStreamSettingsElement>;
             "custom-h1": LocalJSX.CustomH1 & JSXBase.HTMLAttributes<HTMLCustomH1Element>;
             "custom-h2": LocalJSX.CustomH2 & JSXBase.HTMLAttributes<HTMLCustomH2Element>;
-            "display-photo-grid": LocalJSX.DisplayPhotoGrid & JSXBase.HTMLAttributes<HTMLDisplayPhotoGridElement>;
-            "display-selected-photo": LocalJSX.DisplaySelectedPhoto & JSXBase.HTMLAttributes<HTMLDisplaySelectedPhotoElement>;
-            "display-stream": LocalJSX.DisplayStream & JSXBase.HTMLAttributes<HTMLDisplayStreamElement>;
             "dumb-capture-cycle": LocalJSX.DumbCaptureCycle & JSXBase.HTMLAttributes<HTMLDumbCaptureCycleElement>;
-            "guestbook-capture-cycle": LocalJSX.GuestbookCaptureCycle & JSXBase.HTMLAttributes<HTMLGuestbookCaptureCycleElement>;
             "half-screen-section": LocalJSX.HalfScreenSection & JSXBase.HTMLAttributes<HTMLHalfScreenSectionElement>;
-            "init-stream-settings": LocalJSX.InitStreamSettings & JSXBase.HTMLAttributes<HTMLInitStreamSettingsElement>;
             "root-component": LocalJSX.RootComponent & JSXBase.HTMLAttributes<HTMLRootComponentElement>;
-            "smart-guestbook-capture-cycle": LocalJSX.SmartGuestbookCaptureCycle & JSXBase.HTMLAttributes<HTMLSmartGuestbookCaptureCycleElement>;
         }
     }
 }

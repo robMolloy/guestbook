@@ -137,7 +137,7 @@ export class CaptureCycle {
 
         {(this.status === 'capturing' || this.status === 'selecting') && (
           <div style={{ flex: '1' }}>
-            <display-photo-grid ref={elm => (this.displayPhotoGridElement = elm)} />
+            <capture-cycle-display-photo-grid ref={elm => (this.displayPhotoGridElement = elm)} />
           </div>
         )}
 
