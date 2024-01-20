@@ -1,14 +1,14 @@
 import { Component, Element, h, Prop, Method, State } from '@stencil/core';
-import { getImageDataUrlFromVideoElement } from '../../utils/imageDataUrlUtils';
-import { onCountdown } from '../../utils/timeUtils';
+import { getImageDataUrlFromVideoElement } from '@/src/utils/imageDataUrlUtils';
+import { onCountdown } from '@/src/utils/timeUtils';
 
 @Component({
-  tag: 'display-stream',
+  tag: 'capture-cycle-display-stream',
   shadow: true,
-  styleUrls: ['./display-stream.css'],
+  styleUrls: ['./capture-cycle-display-stream.css'],
 })
-export class DisplayStream {
-  @Prop() mediaDimensions!: {
+export class CaptureCycleDisplayStream {
+  @Prop() streamSettings!: {
     videoElementWidth: number;
     videoElementHeight: number;
     mediaWidth: number;
@@ -26,8 +26,8 @@ export class DisplayStream {
   onComponentDidLoad = async () => {
     const mediaStream = await navigator.mediaDevices.getUserMedia({
       video: {
-        width: { ideal: this.mediaDimensions?.mediaWidth },
-        height: { ideal: this.mediaDimensions?.mediaHeight },
+        width: { ideal: this.streamSettings?.mediaWidth },
+        height: { ideal: this.streamSettings?.mediaHeight },
       },
     });
 
@@ -93,7 +93,7 @@ export class DisplayStream {
         <div
           style={{
             height: '37vh',
-            width: `${37 * this.mediaDimensions.aspectRatio}vh`,
+            width: `${37 * this.streamSettings.aspectRatio}vh`,
             position: 'relative',
           }}
         >
@@ -110,8 +110,8 @@ export class DisplayStream {
           <video
             ref={elm => (this.videoElement = elm)}
             style={{ transform: 'scaleX(-1)', height: '100%', width: '100%' }}
-            width={this.mediaDimensions.videoElementWidth}
-            height={this.mediaDimensions.videoElementWidth}
+            width={this.streamSettings.videoElementWidth}
+            height={this.streamSettings.videoElementWidth}
             autoPlay
           />
         </div>

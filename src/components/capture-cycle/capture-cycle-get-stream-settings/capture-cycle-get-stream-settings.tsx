@@ -1,5 +1,5 @@
 import { Component, Element, Event, h, State, EventEmitter, Prop } from '@stencil/core';
-import { getImageDataUrlFromVideoElement } from '../../utils/imageDataUrlUtils';
+import { getImageDataUrlFromVideoElement } from '../../../utils/imageDataUrlUtils';
 
 const getDefaultDeviceOrientation = async (p: { videoElement: HTMLVideoElement }) => {
   const mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -50,7 +50,7 @@ const getMaxVideoDimensions = async (p: {
 };
 
 @Component({
-  tag: 'init-stream-settings',
+  tag: 'capture-cycle-get-stream-settings',
   shadow: true,
 })
 export class initStreamSettings {
@@ -82,9 +82,7 @@ export class initStreamSettings {
   }>;
 
   onComponentDidLoad = async () => {
-    const videoElement = document.createElement('video');
-    videoElement.style.opacity = '0';
-    document.body.appendChild(videoElement);
+    const videoElement = this.videoElement;
     if (videoElement?.srcObject === undefined)
       return this.emitInitSettingsError('cannot find video element');
 
@@ -102,12 +100,11 @@ export class initStreamSettings {
       return this.emitInitSettingsError('cannot get maxVideoDimensions');
 
     const imageDataUrl = getImageDataUrlFromVideoElement({ videoElement });
-    if (this.initSettingsComplete) {
-      return this.initSettingsComplete.emit({
+    if (this.initSettingsComplete)
+      this.initSettingsComplete.emit({
         ...maxVideoDimensions,
         imageDataUrlLength: imageDataUrl?.length,
       });
-    }
   };
 
   componentDidLoad() {

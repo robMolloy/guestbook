@@ -1,7 +1,11 @@
 import { Component, h, Listen, State, Watch } from '@stencil/core';
-import { createBackupImageDataUrlItem } from '../../utils/firestoreUtils';
+import {
+  confirmCreateSelectedImageDataUrlItem,
+  createBackupImageDataUrlItem,
+} from '../../utils/firestoreUtils';
 import { v4 as uuid } from 'uuid';
 import { delay } from '../../utils/timeUtils';
+import { getStreamSettings } from '@/src/utils/streamUtils';
 
 @Component({
   tag: 'smart-guestbook-capture-cycle',
@@ -25,7 +29,6 @@ export class SmartGuestbookCaptureCycle {
     mediaWidth: number;
     mediaHeight: number;
     aspectRatio: number;
-    imageDataUrlLength: number;
   };
 
   displayStreamElement?: HTMLDisplayStreamElement;
@@ -39,7 +42,6 @@ export class SmartGuestbookCaptureCycle {
       mediaWidth: number;
       mediaHeight: number;
       aspectRatio: number;
-      imageDataUrlLength: number;
     }>,
   ) {
     console.log('initSettingsComplete', event.detail);
@@ -65,7 +67,8 @@ export class SmartGuestbookCaptureCycle {
   }
 
   async confirmPhoto() {
-    console.log(123);
+    if (!this.selectedImageDataUrl) return;
+    confirmCreateSelectedImageDataUrlItem({ imageDataUrl: this.selectedImageDataUrl });
     this.status = 'success';
   }
 
@@ -89,13 +92,23 @@ export class SmartGuestbookCaptureCycle {
     this.status = 'selecting';
   }
 
+  async componentDidLoad() {
+    const videoElement = document.createElement('video');
+    document.body.appendChild(videoElement);
+
+    const mediaDimensions = await getStreamSettings({
+      idealWidth: 1080,
+      aspectRatio: 6 / 4,
+    });
+    this.mediaDimensions = mediaDimensions;
+    this.status = 'preReady';
+  }
+
   render() {
-    if (this.status === 'loading')
-      return <init-stream-settings idealWidth={1080} aspectRatio={6 / 4} />;
+    if (this.status === 'loading') return <div>loading...</div>;
 
     return (
       <div
-        data-theme="cupcake"
         style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
         onClick={() => {
           if (this.status === 'ready') this.startCaptureCycle();
@@ -130,18 +143,11 @@ export class SmartGuestbookCaptureCycle {
             <button
               class="btn btn-primary"
               disabled={this.selectedImageDataUrl === undefined}
-              onClick={async () => {
-                this.confirmPhoto();
-              }}
+              onClick={async () => this.confirmPhoto()}
             >
               Choose photo
             </button>
-            <button
-              class="btn btn-accent"
-              onClick={() => {
-                this.status = 'preReady';
-              }}
-            >
+            <button class="btn btn-accent" onClick={() => (this.status = 'preReady')}>
               Start again
             </button>
           </button-container>
@@ -152,13 +158,7 @@ export class SmartGuestbookCaptureCycle {
           </div>
         )}
 
-        {this.status === 'success' && (
-          <div
-            style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <div>success</div>
-          </div>
-        )}
+        {this.status === 'success' && <confirm-photo-success-screen />}
         {this.status === 'error' && (
           <div
             style={{ flex: '1', display: 'flex', alignItems: 'center', justifyContent: 'center' }}

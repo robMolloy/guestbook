@@ -7,8 +7,9 @@ import { Component, h } from '@stencil/core';
 export class RootComponent {
   render() {
     return (
-      <div>
-        <smart-guestbook-capture-cycle></smart-guestbook-capture-cycle>
+      <div data-theme="cupcake">
+        <capture-cycle />
+        {/* <smart-guestbook-capture-cycle></smart-guestbook-capture-cycle> */}
       </div>
     );
   }
