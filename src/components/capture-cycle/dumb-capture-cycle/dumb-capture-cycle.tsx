@@ -92,7 +92,7 @@ export class CaptureCycle {
   render() {
     return (
       <div
-        data-theme="cupcake"
+        data-theme="synthwave"
         style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
         onClick={() => this.runCaptureCycleIfStatusReady()}
       >
