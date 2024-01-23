@@ -64,12 +64,12 @@ export class CaptureCycle {
     this.status = 'capturing';
 
     if (!this.displayStreamElement) return;
-    await this.displayStreamElement?.countdown({ start: 3, stop: 0, clear: true });
+    await this.displayStreamElement.countdown({ start: 3, stop: 0, clear: true });
 
     const groupId = uuid();
 
     for (const _ of [0, 1, 2, 3]) {
-      const imageDataUrl = await this.displayStreamElement?.capture();
+      const imageDataUrl = await this.displayStreamElement.capture();
       if (!imageDataUrl || !this.displayPhotoGridElement) return;
 
       await this.displayPhotoGridElement.addImageDataUrls(imageDataUrl);
@@ -91,7 +91,10 @@ export class CaptureCycle {
       >
         <br />
 
-        <custom-h1>Strike a pose</custom-h1>
+        {this.status === 'ready' && <custom-h1>Click anywhere to start</custom-h1>}
+        {this.status === 'capturing' && <custom-h1>Strike a pose!</custom-h1>}
+        {this.status === 'selecting' && <custom-h1>Select your favourite photo</custom-h1>}
+        {this.status === 'sending' && <custom-h1>Sending...</custom-h1>}
 
         {(this.status === 'ready' || this.status === 'capturing') && !!this.streamSettings && (
           <capture-cycle-display-stream
@@ -124,7 +127,9 @@ export class CaptureCycle {
           </button-container>
         )}
 
-        {(this.status === 'capturing' || this.status === 'selecting') && (
+        {(this.status === 'capturing' ||
+          this.status === 'selecting' ||
+          this.status === 'sending') && (
           <div style={{ flex: '1' }}>
             <capture-cycle-display-photo-grid
               ref={elm => (this.displayPhotoGridElement = elm)}
