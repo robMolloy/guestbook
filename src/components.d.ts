@@ -52,6 +52,8 @@ export namespace Components {
     }
     interface HalfScreenSection {
     }
+    interface LoginForm {
+    }
     interface RootComponent {
     }
 }
@@ -196,6 +198,12 @@ declare global {
         prototype: HTMLHalfScreenSectionElement;
         new (): HTMLHalfScreenSectionElement;
     };
+    interface HTMLLoginFormElement extends Components.LoginForm, HTMLStencilElement {
+    }
+    var HTMLLoginFormElement: {
+        prototype: HTMLLoginFormElement;
+        new (): HTMLLoginFormElement;
+    };
     interface HTMLRootComponentElement extends Components.RootComponent, HTMLStencilElement {
     }
     var HTMLRootComponentElement: {
@@ -215,6 +223,7 @@ declare global {
         "custom-h2": HTMLCustomH2Element;
         "dumb-capture-cycle": HTMLDumbCaptureCycleElement;
         "half-screen-section": HTMLHalfScreenSectionElement;
+        "login-form": HTMLLoginFormElement;
         "root-component": HTMLRootComponentElement;
     }
 }
@@ -273,6 +282,8 @@ declare namespace LocalJSX {
     }
     interface HalfScreenSection {
     }
+    interface LoginForm {
+    }
     interface RootComponent {
     }
     interface IntrinsicElements {
@@ -288,6 +299,7 @@ declare namespace LocalJSX {
         "custom-h2": CustomH2;
         "dumb-capture-cycle": DumbCaptureCycle;
         "half-screen-section": HalfScreenSection;
+        "login-form": LoginForm;
         "root-component": RootComponent;
     }
 }
@@ -307,6 +319,7 @@ declare module "@stencil/core" {
             "custom-h2": LocalJSX.CustomH2 & JSXBase.HTMLAttributes<HTMLCustomH2Element>;
             "dumb-capture-cycle": LocalJSX.DumbCaptureCycle & JSXBase.HTMLAttributes<HTMLDumbCaptureCycleElement>;
             "half-screen-section": LocalJSX.HalfScreenSection & JSXBase.HTMLAttributes<HTMLHalfScreenSectionElement>;
+            "login-form": LocalJSX.LoginForm & JSXBase.HTMLAttributes<HTMLLoginFormElement>;
             "root-component": LocalJSX.RootComponent & JSXBase.HTMLAttributes<HTMLRootComponentElement>;
         }
     }

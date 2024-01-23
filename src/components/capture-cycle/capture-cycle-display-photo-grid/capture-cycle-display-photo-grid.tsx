@@ -26,7 +26,7 @@ export class CaptureCycleDisplayPhotoGrid {
   }
 
   @Event({ eventName: 'selectPhoto' })
-  selectPhoto?: EventEmitter<string>;
+  selectPhoto!: EventEmitter<string>;
 
   render() {
     return (

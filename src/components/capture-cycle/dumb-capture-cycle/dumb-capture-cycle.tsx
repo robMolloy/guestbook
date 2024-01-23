@@ -101,7 +101,9 @@ export class CaptureCycle {
         }}
       >
         <br />
-        <div>{this.status}</div>
+
+        <custom-h1>Strike a pose</custom-h1>
+
         {(this.status === 'ready' || this.status === 'capturing') && !!this.streamSettings && (
           <capture-cycle-display-stream
             ref={elm => (this.displayStreamElement = elm)}

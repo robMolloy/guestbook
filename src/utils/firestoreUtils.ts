@@ -9,21 +9,57 @@ const backupImageDataUrlItemSchema = z.object({
 });
 type TBackupImageDataUrlItem = z.infer<typeof backupImageDataUrlItemSchema>;
 
+type TSelectedImageDataUrlItem = z.infer<typeof selectedImageDataUrlItemSchema>;
 const selectedImageDataUrlItemSchema = z.object({
   imageDataUrl: z.string(),
 });
-type TSelectedImageDataUrlItem = z.infer<typeof selectedImageDataUrlItemSchema>;
+type SafeParseOutput<T extends z.AnyZodObject> = z.infer<T>;
 
-export const readSelectedImageDataUrlItemById = async (id: string) => {
-  const docRef = doc(db, 'selectedImageDataUrls', id);
+export const readDocumentById = async <T extends z.AnyZodObject>(p: {
+  id: string;
+  collectionName: string;
+  zodSchema: T;
+}) => {
+  const docRef = doc(db, p.collectionName, p.id);
   const docSnap = await getDoc(docRef);
 
   if (!docSnap.exists()) return;
 
-  const parseResponse = selectedImageDataUrlItemSchema.safeParse(docSnap.data());
+  const parseResponse = p.zodSchema.safeParse(docSnap.data()) as SafeParseOutput<T>;
+
   if (!parseResponse.success) return;
-  return { id, ...parseResponse.data };
+
+  return { id: p.id, ...parseResponse.data };
 };
+
+const a = await readDocumentById({
+  id: 'asd',
+  collectionName: 'selectedImageDataUrls',
+  zodSchema: selectedImageDataUrlItemSchema,
+});
+console.log(`firestoreUtils.ts:${/*LL*/ 55}`, { a });
+
+export const readAllDocumentsInCollection = async () => {
+  const items: TSelectedImageDataUrlItem[] = [];
+  const querySnapshot = await getDocs(collection(db, 'selectedImageDataUrls'));
+
+  return new Promise(resolve => {
+    querySnapshot.forEach(doc => {
+      const parseResponse = selectedImageDataUrlItemSchema.safeParse(doc.data());
+      if (parseResponse.success) items.push(parseResponse.data);
+    });
+    resolve(items);
+  });
+};
+
+export const readSelectedImageDataUrlItemById = async (id: string) => {
+  return readDocumentById({
+    id,
+    collectionName: 'selectedImageDataUrls',
+    zodSchema: selectedImageDataUrlItemSchema,
+  });
+};
+
 export const readAllSelectedImageDataUrlItems = async () => {
   const items: TSelectedImageDataUrlItem[] = [];
   const querySnapshot = await getDocs(collection(db, 'selectedImageDataUrls'));

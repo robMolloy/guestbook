@@ -17,7 +17,7 @@ export class CaptureCycleDisplayStream {
   };
   @State() countdownInt?: number;
 
-  @Element() rootElement: HTMLElement | undefined;
+  @Element() rootElement!: HTMLElement;
   videoElement: HTMLVideoElement | undefined;
 
   @State() isFlash: boolean = false;
