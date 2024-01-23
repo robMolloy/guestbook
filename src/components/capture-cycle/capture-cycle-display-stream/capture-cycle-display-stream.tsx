@@ -16,14 +16,13 @@ export class CaptureCycleDisplayStream {
     aspectRatio: number;
   };
   @State() countdownInt?: number;
+  @State() isFlash: boolean = false;
+  flashElement: HTMLDivElement | undefined;
 
   @Element() rootElement!: HTMLElement;
   videoElement: HTMLVideoElement | undefined;
 
-  @State() isFlash: boolean = false;
-  flashElement: HTMLDivElement | undefined;
-
-  onComponentDidLoad = async () => {
+  async componentDidLoad() {
     const mediaStream = await navigator.mediaDevices.getUserMedia({
       video: {
         width: { ideal: this.streamSettings?.mediaWidth },
@@ -32,9 +31,6 @@ export class CaptureCycleDisplayStream {
     });
 
     if (!!this.videoElement) this.videoElement.srcObject = mediaStream;
-  };
-  componentDidLoad() {
-    this.onComponentDidLoad();
   }
 
   flash() {

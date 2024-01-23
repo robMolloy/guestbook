@@ -1,10 +1,19 @@
-import {
-  confirmCreateSelectedImageDataUrlItem,
-  createBackupImageDataUrlItem,
-} from '@/src/utils/firestoreUtils';
+import { uploadSelectedImageAndConfirm, uploadBackupImage } from '@/src/utils/firestoreUtils';
 import { delay } from '@/src/utils/timeUtils';
 import { Component, Prop, State, Watch, h } from '@stencil/core';
 import { v4 as uuid } from 'uuid';
+
+type TStatus = CaptureCycle['status'];
+const i18n = {
+  captureCycle: {
+    heading: {
+      ready: 'Click anywhere to start',
+      capturing: 'Strike a pose!',
+      selecting: 'Select your favourite photo',
+      sending: 'Sending...',
+    } as { [key in TStatus]?: string },
+  },
+};
 
 @Component({
   tag: 'dumb-capture-cycle',
@@ -35,8 +44,7 @@ export class CaptureCycle {
     aspectRatio: number;
   };
 
-  @Watch('status')
-  watchPropHandler() {
+  @Watch('status') watchPropHandler() {
     if (this.status === 'preReady') {
       this.selectedImageDataUrl = undefined;
       // TODO: fix: setTimeout used to delay restart as it recognises the status ready click causing the start cycle
@@ -52,7 +60,7 @@ export class CaptureCycle {
     this.status = 'sending';
     if (!this.selectedImageDataUrl) return;
 
-    const resp = await confirmCreateSelectedImageDataUrlItem({
+    const resp = await uploadSelectedImageAndConfirm({
       id: uuid(),
       imageDataUrl: this.selectedImageDataUrl,
     });
@@ -60,7 +68,8 @@ export class CaptureCycle {
     this.status = resp.success ? 'success' : 'fail';
   }
 
-  async runCaptureCycle() {
+  async runCaptureCycleIfStatusReady() {
+    if (this.status !== 'ready') return;
     this.status = 'capturing';
 
     if (!this.displayStreamElement) return;
@@ -73,7 +82,7 @@ export class CaptureCycle {
       if (!imageDataUrl || !this.displayPhotoGridElement) return;
 
       await this.displayPhotoGridElement.addImageDataUrls(imageDataUrl);
-      createBackupImageDataUrlItem({ id: uuid(), imageDataUrl, groupId });
+      uploadBackupImage({ id: uuid(), imageDataUrl, groupId });
 
       await delay(2000);
     }
@@ -85,16 +94,11 @@ export class CaptureCycle {
       <div
         data-theme="cupcake"
         style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
-        onClick={() => {
-          if (this.status === 'ready') this.runCaptureCycle();
-        }}
+        onClick={() => this.runCaptureCycleIfStatusReady()}
       >
-        <br />
-
-        {this.status === 'ready' && <custom-h1>Click anywhere to start</custom-h1>}
-        {this.status === 'capturing' && <custom-h1>Strike a pose!</custom-h1>}
-        {this.status === 'selecting' && <custom-h1>Select your favourite photo</custom-h1>}
-        {this.status === 'sending' && <custom-h1>Sending...</custom-h1>}
+        {i18n.captureCycle.heading[this.status] && (
+          <custom-h1>{i18n.captureCycle.heading[this.status]}</custom-h1>
+        )}
 
         {(this.status === 'ready' || this.status === 'capturing') && !!this.streamSettings && (
           <capture-cycle-display-stream
@@ -102,26 +106,35 @@ export class CaptureCycle {
             streamSettings={this.streamSettings}
           />
         )}
-
         {(this.status === 'selecting' || this.status === 'sending') && (
           <capture-cycle-display-selected-photo
             selectedImageDataUrl={this.selectedImageDataUrl}
             ref={elm => (this.displaySelectedPhotoElement = elm)}
           />
         )}
-
-        {(this.status === 'selecting' || this.status === 'sending') && (
+        {this.status === 'sending' && (
+          <button-container>
+            <span class="loading loading-spinner loading-lg"></span>
+          </button-container>
+        )}
+        {(this.status === 'selecting' || this.status === 'capturing') && (
           <button-container>
             <button
               class="btn btn-primary"
-              disabled={this.selectedImageDataUrl === undefined || this.status === 'sending'}
+              disabled={this.selectedImageDataUrl === undefined || this.status === 'capturing'}
               onClick={async () => {
                 if (this.status !== 'sending') this.sendSelectedImageDataUrl();
               }}
             >
               Choose photo
             </button>
-            <button class="btn btn-accent" onClick={() => (this.status = 'preReady')}>
+            <button
+              class="btn btn-accent"
+              disabled={this.status === 'capturing'}
+              onClick={() => {
+                if ((this.status = 'selecting')) this.status = 'preReady';
+              }}
+            >
               Start again
             </button>
           </button-container>
@@ -139,21 +152,17 @@ export class CaptureCycle {
             />
           </div>
         )}
-
         {this.status === 'success' && (
           <capture-cycle-confirm-photo-success-screen
-            onStartAgainClick={() => {
-              this.status = 'preReady';
-            }}
+            onStartAgainClick={() => (this.status = 'preReady')}
           />
         )}
         {this.status === 'fail' && (
           <capture-cycle-confirm-photo-fail-screen
-            onStartAgainClick={() => {
-              this.status = 'preReady';
-            }}
+            onStartAgainClick={() => (this.status = 'preReady')}
           />
         )}
+        <br />
       </div>
     );
   }
