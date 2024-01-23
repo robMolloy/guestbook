@@ -6,10 +6,7 @@ import { Component, Event, EventEmitter, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class RootComponent {
-  @Event() goToStartGuestbookScreen: EventEmitter | undefined;
-  emitGoToStartGuestbookScreenEvent() {
-    if (this.goToStartGuestbookScreen) this.goToStartGuestbookScreen.emit();
-  }
+  @Event() startAgainClick!: EventEmitter;
   @Prop() error: string | undefined;
 
   render() {
@@ -29,7 +26,12 @@ export class RootComponent {
 
           <br />
 
-          <button class="btn btn-primary" onClick={() => this.emitGoToStartGuestbookScreenEvent()}>
+          <button
+            class="btn btn-primary"
+            onClick={() => {
+              this.startAgainClick.emit();
+            }}
+          >
             Tap to try again
           </button>
 

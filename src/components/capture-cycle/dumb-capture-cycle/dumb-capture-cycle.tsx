@@ -3,7 +3,7 @@ import {
   createBackupImageDataUrlItem,
 } from '@/src/utils/firestoreUtils';
 import { delay } from '@/src/utils/timeUtils';
-import { Component, Listen, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Prop, State, Watch, h } from '@stencil/core';
 import { v4 as uuid } from 'uuid';
 
 @Component({
@@ -13,15 +13,15 @@ import { v4 as uuid } from 'uuid';
 })
 export class CaptureCycle {
   @State() selectedImageDataUrl?: string = undefined;
-  @State() isSelectedImageDataUrlSending?: boolean = false;
   @State() status:
     | 'loading'
-    | 'ready'
-    | 'fail'
-    | 'success'
     | 'preReady'
+    | 'ready'
     | 'capturing'
-    | 'selecting' = 'loading';
+    | 'selecting'
+    | 'sending'
+    | 'fail'
+    | 'success' = 'loading';
 
   displayStreamElement?: HTMLCaptureCycleDisplayStreamElement;
   displayPhotoGridElement?: HTMLCaptureCycleDisplayPhotoGridElement;
@@ -49,29 +49,18 @@ export class CaptureCycle {
   }
 
   async sendSelectedImageDataUrl() {
+    this.status = 'sending';
     if (!this.selectedImageDataUrl) return;
-    if (this.isSelectedImageDataUrlSending) return;
-    this.isSelectedImageDataUrlSending = true;
+
     const resp = await confirmCreateSelectedImageDataUrlItem({
+      id: uuid(),
       imageDataUrl: this.selectedImageDataUrl,
     });
-    console.log(resp);
 
-    this.status = 'success';
-    this.isSelectedImageDataUrlSending = false;
+    this.status = resp.success ? 'success' : 'fail';
   }
 
-  @Listen('selectPhoto')
-  selectPhoto(event: CustomEvent<string>) {
-    if (this.status === 'selecting') this.selectedImageDataUrl = event.detail;
-  }
-
-  @Listen('goToCaptureCycleStatusPreReady')
-  goToStartGuestbookScreen() {
-    this.status = 'preReady';
-  }
-
-  async startCaptureCycle() {
+  async runCaptureCycle() {
     this.status = 'capturing';
 
     if (!this.displayStreamElement) return;
@@ -84,7 +73,7 @@ export class CaptureCycle {
       if (!imageDataUrl || !this.displayPhotoGridElement) return;
 
       await this.displayPhotoGridElement.addImageDataUrls(imageDataUrl);
-      createBackupImageDataUrlItem({ imageDataUrl, groupId });
+      createBackupImageDataUrlItem({ id: uuid(), imageDataUrl, groupId });
 
       await delay(2000);
     }
@@ -97,7 +86,7 @@ export class CaptureCycle {
         data-theme="cupcake"
         style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
         onClick={() => {
-          if (this.status === 'ready') this.startCaptureCycle();
+          if (this.status === 'ready') this.runCaptureCycle();
         }}
       >
         <br />
@@ -111,22 +100,20 @@ export class CaptureCycle {
           />
         )}
 
-        {this.status === 'selecting' && (
+        {(this.status === 'selecting' || this.status === 'sending') && (
           <capture-cycle-display-selected-photo
             selectedImageDataUrl={this.selectedImageDataUrl}
             ref={elm => (this.displaySelectedPhotoElement = elm)}
           />
         )}
 
-        {this.status === 'selecting' && (
+        {(this.status === 'selecting' || this.status === 'sending') && (
           <button-container>
             <button
               class="btn btn-primary"
-              disabled={
-                this.selectedImageDataUrl === undefined || this.isSelectedImageDataUrlSending
-              }
+              disabled={this.selectedImageDataUrl === undefined || this.status === 'sending'}
               onClick={async () => {
-                if (!this.isSelectedImageDataUrlSending) this.sendSelectedImageDataUrl();
+                if (this.status !== 'sending') this.sendSelectedImageDataUrl();
               }}
             >
               Choose photo
@@ -139,12 +126,29 @@ export class CaptureCycle {
 
         {(this.status === 'capturing' || this.status === 'selecting') && (
           <div style={{ flex: '1' }}>
-            <capture-cycle-display-photo-grid ref={elm => (this.displayPhotoGridElement = elm)} />
+            <capture-cycle-display-photo-grid
+              ref={elm => (this.displayPhotoGridElement = elm)}
+              onSelectPhoto={e => {
+                if (this.status === 'selecting') this.selectedImageDataUrl = e.detail;
+              }}
+            />
           </div>
         )}
 
-        {this.status === 'success' && <capture-cycle-confirm-photo-success-screen />}
-        {this.status === 'fail' && <capture-cycle-confirm-photo-fail-screen />}
+        {this.status === 'success' && (
+          <capture-cycle-confirm-photo-success-screen
+            onStartAgainClick={() => {
+              this.status = 'preReady';
+            }}
+          />
+        )}
+        {this.status === 'fail' && (
+          <capture-cycle-confirm-photo-fail-screen
+            onStartAgainClick={() => {
+              this.status = 'preReady';
+            }}
+          />
+        )}
       </div>
     );
   }

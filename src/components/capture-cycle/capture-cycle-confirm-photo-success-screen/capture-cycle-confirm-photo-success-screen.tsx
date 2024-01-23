@@ -8,10 +8,7 @@ import { onCountdown } from '../../../utils/timeUtils';
 })
 export class RootComponent {
   @State() countdownInt: number | undefined = 60;
-  @Event() goToCaptureCycleStatusPreReady?: EventEmitter;
-  emitGoToCaptureCycleStatusPreReady = () => {
-    if (!!this.goToCaptureCycleStatusPreReady) this.goToCaptureCycleStatusPreReady.emit();
-  };
+  @Event() startAgainClick!: EventEmitter;
 
   componentDidLoad() {
     (async () => {
@@ -47,7 +44,7 @@ export class RootComponent {
                 <button
                   class="btn btn-primary"
                   onClick={() => {
-                    this.emitGoToCaptureCycleStatusPreReady();
+                    this.startAgainClick.emit();
                   }}
                 >
                   Start again

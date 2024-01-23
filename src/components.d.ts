@@ -87,7 +87,7 @@ declare global {
         new (): HTMLCaptureCycleElement;
     };
     interface HTMLCaptureCycleConfirmPhotoFailScreenElementEventMap {
-        "goToStartGuestbookScreen": any;
+        "startAgainClick": any;
     }
     interface HTMLCaptureCycleConfirmPhotoFailScreenElement extends Components.CaptureCycleConfirmPhotoFailScreen, HTMLStencilElement {
         addEventListener<K extends keyof HTMLCaptureCycleConfirmPhotoFailScreenElementEventMap>(type: K, listener: (this: HTMLCaptureCycleConfirmPhotoFailScreenElement, ev: CaptureCycleConfirmPhotoFailScreenCustomEvent<HTMLCaptureCycleConfirmPhotoFailScreenElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -104,7 +104,7 @@ declare global {
         new (): HTMLCaptureCycleConfirmPhotoFailScreenElement;
     };
     interface HTMLCaptureCycleConfirmPhotoSuccessScreenElementEventMap {
-        "goToCaptureCycleStatusPreReady": any;
+        "startAgainClick": any;
     }
     interface HTMLCaptureCycleConfirmPhotoSuccessScreenElement extends Components.CaptureCycleConfirmPhotoSuccessScreen, HTMLStencilElement {
         addEventListener<K extends keyof HTMLCaptureCycleConfirmPhotoSuccessScreenElementEventMap>(type: K, listener: (this: HTMLCaptureCycleConfirmPhotoSuccessScreenElement, ev: CaptureCycleConfirmPhotoSuccessScreenCustomEvent<HTMLCaptureCycleConfirmPhotoSuccessScreenElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -234,10 +234,10 @@ declare namespace LocalJSX {
     }
     interface CaptureCycleConfirmPhotoFailScreen {
         "error"?: string | undefined;
-        "onGoToStartGuestbookScreen"?: (event: CaptureCycleConfirmPhotoFailScreenCustomEvent<any>) => void;
+        "onStartAgainClick"?: (event: CaptureCycleConfirmPhotoFailScreenCustomEvent<any>) => void;
     }
     interface CaptureCycleConfirmPhotoSuccessScreen {
-        "onGoToCaptureCycleStatusPreReady"?: (event: CaptureCycleConfirmPhotoSuccessScreenCustomEvent<any>) => void;
+        "onStartAgainClick"?: (event: CaptureCycleConfirmPhotoSuccessScreenCustomEvent<any>) => void;
     }
     interface CaptureCycleDisplayPhotoGrid {
         "onSelectPhoto"?: (event: CaptureCycleDisplayPhotoGridCustomEvent<string>) => void;
