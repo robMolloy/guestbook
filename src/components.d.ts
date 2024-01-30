@@ -50,11 +50,17 @@ export namespace Components {
     aspectRatio: number;
   };
     }
+    interface EventList {
+    }
     interface HalfScreenSection {
     }
-    interface LoginForm {
-    }
     interface RootComponent {
+    }
+    interface UserAuthCard {
+    }
+    interface UserCreateForm {
+    }
+    interface UserLoginForm {
     }
 }
 export interface CaptureCycleConfirmPhotoFailScreenCustomEvent<T> extends CustomEvent<T> {
@@ -72,6 +78,14 @@ export interface CaptureCycleDisplayPhotoGridCustomEvent<T> extends CustomEvent<
 export interface CaptureCycleGetStreamSettingsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCaptureCycleGetStreamSettingsElement;
+}
+export interface UserCreateFormCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserCreateFormElement;
+}
+export interface UserLoginFormCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLUserLoginFormElement;
 }
 declare global {
     interface HTMLButtonContainerElement extends Components.ButtonContainer, HTMLStencilElement {
@@ -192,23 +206,65 @@ declare global {
         prototype: HTMLDumbCaptureCycleElement;
         new (): HTMLDumbCaptureCycleElement;
     };
+    interface HTMLEventListElement extends Components.EventList, HTMLStencilElement {
+    }
+    var HTMLEventListElement: {
+        prototype: HTMLEventListElement;
+        new (): HTMLEventListElement;
+    };
     interface HTMLHalfScreenSectionElement extends Components.HalfScreenSection, HTMLStencilElement {
     }
     var HTMLHalfScreenSectionElement: {
         prototype: HTMLHalfScreenSectionElement;
         new (): HTMLHalfScreenSectionElement;
     };
-    interface HTMLLoginFormElement extends Components.LoginForm, HTMLStencilElement {
-    }
-    var HTMLLoginFormElement: {
-        prototype: HTMLLoginFormElement;
-        new (): HTMLLoginFormElement;
-    };
     interface HTMLRootComponentElement extends Components.RootComponent, HTMLStencilElement {
     }
     var HTMLRootComponentElement: {
         prototype: HTMLRootComponentElement;
         new (): HTMLRootComponentElement;
+    };
+    interface HTMLUserAuthCardElement extends Components.UserAuthCard, HTMLStencilElement {
+    }
+    var HTMLUserAuthCardElement: {
+        prototype: HTMLUserAuthCardElement;
+        new (): HTMLUserAuthCardElement;
+    };
+    interface HTMLUserCreateFormElementEventMap {
+        "createUserSuccess": any;
+        "createUserFail": any;
+    }
+    interface HTMLUserCreateFormElement extends Components.UserCreateForm, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserCreateFormElementEventMap>(type: K, listener: (this: HTMLUserCreateFormElement, ev: UserCreateFormCustomEvent<HTMLUserCreateFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserCreateFormElementEventMap>(type: K, listener: (this: HTMLUserCreateFormElement, ev: UserCreateFormCustomEvent<HTMLUserCreateFormElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLUserCreateFormElement: {
+        prototype: HTMLUserCreateFormElement;
+        new (): HTMLUserCreateFormElement;
+    };
+    interface HTMLUserLoginFormElementEventMap {
+        "loginSuccess": any;
+        "loginFail": any;
+    }
+    interface HTMLUserLoginFormElement extends Components.UserLoginForm, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLUserLoginFormElementEventMap>(type: K, listener: (this: HTMLUserLoginFormElement, ev: UserLoginFormCustomEvent<HTMLUserLoginFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLUserLoginFormElementEventMap>(type: K, listener: (this: HTMLUserLoginFormElement, ev: UserLoginFormCustomEvent<HTMLUserLoginFormElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLUserLoginFormElement: {
+        prototype: HTMLUserLoginFormElement;
+        new (): HTMLUserLoginFormElement;
     };
     interface HTMLElementTagNameMap {
         "button-container": HTMLButtonContainerElement;
@@ -222,9 +278,12 @@ declare global {
         "custom-h1": HTMLCustomH1Element;
         "custom-h2": HTMLCustomH2Element;
         "dumb-capture-cycle": HTMLDumbCaptureCycleElement;
+        "event-list": HTMLEventListElement;
         "half-screen-section": HTMLHalfScreenSectionElement;
-        "login-form": HTMLLoginFormElement;
         "root-component": HTMLRootComponentElement;
+        "user-auth-card": HTMLUserAuthCardElement;
+        "user-create-form": HTMLUserCreateFormElement;
+        "user-login-form": HTMLUserLoginFormElement;
     }
 }
 declare namespace LocalJSX {
@@ -280,11 +339,21 @@ declare namespace LocalJSX {
     aspectRatio: number;
   };
     }
+    interface EventList {
+    }
     interface HalfScreenSection {
     }
-    interface LoginForm {
-    }
     interface RootComponent {
+    }
+    interface UserAuthCard {
+    }
+    interface UserCreateForm {
+        "onCreateUserFail"?: (event: UserCreateFormCustomEvent<any>) => void;
+        "onCreateUserSuccess"?: (event: UserCreateFormCustomEvent<any>) => void;
+    }
+    interface UserLoginForm {
+        "onLoginFail"?: (event: UserLoginFormCustomEvent<any>) => void;
+        "onLoginSuccess"?: (event: UserLoginFormCustomEvent<any>) => void;
     }
     interface IntrinsicElements {
         "button-container": ButtonContainer;
@@ -298,9 +367,12 @@ declare namespace LocalJSX {
         "custom-h1": CustomH1;
         "custom-h2": CustomH2;
         "dumb-capture-cycle": DumbCaptureCycle;
+        "event-list": EventList;
         "half-screen-section": HalfScreenSection;
-        "login-form": LoginForm;
         "root-component": RootComponent;
+        "user-auth-card": UserAuthCard;
+        "user-create-form": UserCreateForm;
+        "user-login-form": UserLoginForm;
     }
 }
 export { LocalJSX as JSX };
@@ -318,9 +390,12 @@ declare module "@stencil/core" {
             "custom-h1": LocalJSX.CustomH1 & JSXBase.HTMLAttributes<HTMLCustomH1Element>;
             "custom-h2": LocalJSX.CustomH2 & JSXBase.HTMLAttributes<HTMLCustomH2Element>;
             "dumb-capture-cycle": LocalJSX.DumbCaptureCycle & JSXBase.HTMLAttributes<HTMLDumbCaptureCycleElement>;
+            "event-list": LocalJSX.EventList & JSXBase.HTMLAttributes<HTMLEventListElement>;
             "half-screen-section": LocalJSX.HalfScreenSection & JSXBase.HTMLAttributes<HTMLHalfScreenSectionElement>;
-            "login-form": LocalJSX.LoginForm & JSXBase.HTMLAttributes<HTMLLoginFormElement>;
             "root-component": LocalJSX.RootComponent & JSXBase.HTMLAttributes<HTMLRootComponentElement>;
+            "user-auth-card": LocalJSX.UserAuthCard & JSXBase.HTMLAttributes<HTMLUserAuthCardElement>;
+            "user-create-form": LocalJSX.UserCreateForm & JSXBase.HTMLAttributes<HTMLUserCreateFormElement>;
+            "user-login-form": LocalJSX.UserLoginForm & JSXBase.HTMLAttributes<HTMLUserLoginFormElement>;
         }
     }
 }

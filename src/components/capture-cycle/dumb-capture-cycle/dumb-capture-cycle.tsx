@@ -52,7 +52,7 @@ export class CaptureCycle {
     }
   }
 
-  async componentDidLoad() {
+  async componentWillLoad() {
     this.status = 'preReady';
   }
 
