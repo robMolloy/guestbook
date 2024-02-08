@@ -44,7 +44,7 @@ export const uploadSelectedImage = async (seed: TSelectedImageUploadSeed) => {
 };
 
 export const readSelectedImageDbEntry = async (id: string) => {
-  const docRef = doc(db, 'selectedImages', id);
+  const docRef = doc(db, collectionName, id);
   const docSnap = await getDoc(docRef);
 
   if (!docSnap.exists())

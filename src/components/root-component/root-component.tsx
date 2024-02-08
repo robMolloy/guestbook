@@ -1,4 +1,5 @@
 import { auth } from '@/src/config/firebase-config';
+import { appDataStore } from '@/src/stores/appDataStore';
 import { css } from '@/src/utils/cssUtils';
 import { Component, Host, State, h } from '@stencil/core';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -13,16 +14,23 @@ export class RootComponent {
   componentWillLoad() {
     onAuthStateChanged(auth, user => {
       this.isLoggedIn = !!user?.uid;
+      appDataStore.state.user = user ? user : undefined;
     });
   }
   render() {
     return (
       <Host>
-        {this.isLoggedIn === undefined && (
-          <div>
-            <span class="loading loading-spinner loading-lg"></span>
-          </div>
-        )}
+        state:
+        <pre>{JSON.stringify(appDataStore, undefined, 2)}</pre>
+        <br />
+        <button
+          onClick={() => {
+            // state.clicks++;
+          }}
+        >
+          click
+        </button>
+        {this.isLoggedIn === undefined && <span class="loading loading-spinner loading-lg" />}
         {this.isLoggedIn === false && (
           <div style={css({ display: 'flex', justifyContent: 'center', marginTop: '100px' })}>
             <div style={css({ minWidth: '450px' })}>

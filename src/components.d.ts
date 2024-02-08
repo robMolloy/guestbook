@@ -5,6 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { z } from "zod";
+export { z } from "zod";
 export namespace Components {
     interface ButtonContainer {
     }
@@ -36,6 +38,8 @@ export namespace Components {
     interface CaptureCycleGetStreamSettings {
         "aspectRatio": number;
         "idealWidth": number;
+    }
+    interface CreateNewEventForm {
     }
     interface CustomH1 {
     }
@@ -78,6 +82,10 @@ export interface CaptureCycleDisplayPhotoGridCustomEvent<T> extends CustomEvent<
 export interface CaptureCycleGetStreamSettingsCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCaptureCycleGetStreamSettingsElement;
+}
+export interface CreateNewEventFormCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCreateNewEventFormElement;
 }
 export interface UserCreateFormCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -188,6 +196,23 @@ declare global {
         prototype: HTMLCaptureCycleGetStreamSettingsElement;
         new (): HTMLCaptureCycleGetStreamSettingsElement;
     };
+    interface HTMLCreateNewEventFormElementEventMap {
+        "createEventSuccess": z.infer<typeof eventDbEntrySchema>;
+    }
+    interface HTMLCreateNewEventFormElement extends Components.CreateNewEventForm, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCreateNewEventFormElementEventMap>(type: K, listener: (this: HTMLCreateNewEventFormElement, ev: CreateNewEventFormCustomEvent<HTMLCreateNewEventFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCreateNewEventFormElementEventMap>(type: K, listener: (this: HTMLCreateNewEventFormElement, ev: CreateNewEventFormCustomEvent<HTMLCreateNewEventFormElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCreateNewEventFormElement: {
+        prototype: HTMLCreateNewEventFormElement;
+        new (): HTMLCreateNewEventFormElement;
+    };
     interface HTMLCustomH1Element extends Components.CustomH1, HTMLStencilElement {
     }
     var HTMLCustomH1Element: {
@@ -275,6 +300,7 @@ declare global {
         "capture-cycle-display-selected-photo": HTMLCaptureCycleDisplaySelectedPhotoElement;
         "capture-cycle-display-stream": HTMLCaptureCycleDisplayStreamElement;
         "capture-cycle-get-stream-settings": HTMLCaptureCycleGetStreamSettingsElement;
+        "create-new-event-form": HTMLCreateNewEventFormElement;
         "custom-h1": HTMLCustomH1Element;
         "custom-h2": HTMLCustomH2Element;
         "dumb-capture-cycle": HTMLDumbCaptureCycleElement;
@@ -326,6 +352,9 @@ declare namespace LocalJSX {
   }>) => void;
         "onInitSettingsError"?: (event: CaptureCycleGetStreamSettingsCustomEvent<string>) => void;
     }
+    interface CreateNewEventForm {
+        "onCreateEventSuccess"?: (event: CreateNewEventFormCustomEvent<z.infer<typeof eventDbEntrySchema>>) => void;
+    }
     interface CustomH1 {
     }
     interface CustomH2 {
@@ -364,6 +393,7 @@ declare namespace LocalJSX {
         "capture-cycle-display-selected-photo": CaptureCycleDisplaySelectedPhoto;
         "capture-cycle-display-stream": CaptureCycleDisplayStream;
         "capture-cycle-get-stream-settings": CaptureCycleGetStreamSettings;
+        "create-new-event-form": CreateNewEventForm;
         "custom-h1": CustomH1;
         "custom-h2": CustomH2;
         "dumb-capture-cycle": DumbCaptureCycle;
@@ -387,6 +417,7 @@ declare module "@stencil/core" {
             "capture-cycle-display-selected-photo": LocalJSX.CaptureCycleDisplaySelectedPhoto & JSXBase.HTMLAttributes<HTMLCaptureCycleDisplaySelectedPhotoElement>;
             "capture-cycle-display-stream": LocalJSX.CaptureCycleDisplayStream & JSXBase.HTMLAttributes<HTMLCaptureCycleDisplayStreamElement>;
             "capture-cycle-get-stream-settings": LocalJSX.CaptureCycleGetStreamSettings & JSXBase.HTMLAttributes<HTMLCaptureCycleGetStreamSettingsElement>;
+            "create-new-event-form": LocalJSX.CreateNewEventForm & JSXBase.HTMLAttributes<HTMLCreateNewEventFormElement>;
             "custom-h1": LocalJSX.CustomH1 & JSXBase.HTMLAttributes<HTMLCustomH1Element>;
             "custom-h2": LocalJSX.CustomH2 & JSXBase.HTMLAttributes<HTMLCustomH2Element>;
             "dumb-capture-cycle": LocalJSX.DumbCaptureCycle & JSXBase.HTMLAttributes<HTMLDumbCaptureCycleElement>;

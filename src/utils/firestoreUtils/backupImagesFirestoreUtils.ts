@@ -47,7 +47,7 @@ export const uploadBackupImage = async (seed: TBackupImageUploadSeed) => {
 };
 
 export const readBackupImageDbEntries = async (id: string) => {
-  const docRef = doc(db, 'backupImages', id);
+  const docRef = doc(db, collectionName, id);
   const docSnap = await getDoc(docRef);
 
   if (!docSnap.exists())
@@ -57,7 +57,7 @@ export const readBackupImageDbEntries = async (id: string) => {
 };
 export const readAllValidBackupImageDbEntries = async () => {
   try {
-    const querySnapshot = await getDocs(collection(db, 'backupImages'));
+    const querySnapshot = await getDocs(collection(db, collectionName));
 
     const items: TBackupImageDbEntrySchema[] = [];
     querySnapshot.forEach(doc => {
@@ -86,7 +86,7 @@ export const deleteAllValidBackupImageDbEntries = async () => {
 };
 
 export const createBackupImageDataUrlItem = async (item: TBackupImageUploadSeed) => {
-  await setDoc(doc(db, 'backupImages', item.id), { ...item });
+  await setDoc(doc(db, collectionName, item.id), { ...item });
   return { success: true, data: item } as const;
 };
 
