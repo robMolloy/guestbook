@@ -1,19 +1,13 @@
 import { createStore } from '@stencil/store';
 import { User } from 'firebase/auth';
+import { eventDbEntrySchema } from '../utils/firestoreUtils';
+import { z } from 'zod';
 
 export const appDataStore = createStore({
   user: undefined as undefined | User,
   uid: undefined as undefined | string,
   isLoggedIn: undefined as undefined | boolean,
-  currentEvent: undefined as
-    | undefined
-    | {
-        id: string;
-        uid: string;
-        name: string;
-        createdAt: { seconds: number };
-        updatedAt: { seconds: number };
-      },
+  currentEvent: undefined as undefined | z.infer<typeof eventDbEntrySchema>,
   theme: 'synthwave',
 });
 

@@ -195,13 +195,7 @@ declare global {
         new (): HTMLCaptureCycleGetStreamSettingsElement;
     };
     interface HTMLCreateNewEventFormElementEventMap {
-        "createEventSuccess": {
-    id: string;
-    uid: string;
-    name: string;
-    createdAt: { seconds: number };
-    updatedAt: { seconds: number };
-  };
+        "createEventSuccess": any;
     }
     interface HTMLCreateNewEventFormElement extends Components.CreateNewEventForm, HTMLStencilElement {
         addEventListener<K extends keyof HTMLCreateNewEventFormElementEventMap>(type: K, listener: (this: HTMLCreateNewEventFormElement, ev: CreateNewEventFormCustomEvent<HTMLCreateNewEventFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -357,13 +351,7 @@ declare namespace LocalJSX {
         "onInitSettingsError"?: (event: CaptureCycleGetStreamSettingsCustomEvent<string>) => void;
     }
     interface CreateNewEventForm {
-        "onCreateEventSuccess"?: (event: CreateNewEventFormCustomEvent<{
-    id: string;
-    uid: string;
-    name: string;
-    createdAt: { seconds: number };
-    updatedAt: { seconds: number };
-  }>) => void;
+        "onCreateEventSuccess"?: (event: CreateNewEventFormCustomEvent<any>) => void;
     }
     interface CustomH1 {
     }

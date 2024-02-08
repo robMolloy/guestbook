@@ -1,9 +1,11 @@
 import { auth } from '@/src/config/firebase-config';
 import { css } from '@/src/utils/cssUtils';
-import { createEventDbEntryAndConfirm } from '@/src/utils/firestoreUtils';
+import { createEventDbEntryAndConfirm, eventDbEntrySchema } from '@/src/utils/firestoreUtils';
 import { Component, Event, EventEmitter, State, h } from '@stencil/core';
 import { v4 as uuid } from 'uuid';
 import { z } from 'zod';
+
+type TCreateEventSuccessEventEmitter = EventEmitter<z.infer<typeof eventDbEntrySchema>>;
 
 @Component({
   tag: 'create-new-event-form',
@@ -15,13 +17,7 @@ export class StartNewEventForm {
   @State() formErrorMessage = '';
   @State() eventName: string = '';
   @State() eventNameErrorMessage: string = '';
-  @Event({ eventName: 'createEventSuccess' }) createEventSuccess!: EventEmitter<{
-    id: string;
-    uid: string;
-    name: string;
-    createdAt: { seconds: number };
-    updatedAt: { seconds: number };
-  }>;
+  @Event({ eventName: 'createEventSuccess' }) createEventSuccess!: TCreateEventSuccessEventEmitter;
 
   async onSubmit() {
     this.checkEventNameValid();
