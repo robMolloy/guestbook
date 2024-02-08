@@ -3,19 +3,9 @@ import { appDataStore } from '@/src/stores/appDataStore';
 import { css } from '@/src/utils/cssUtils';
 import { logoutFirebaseUser } from '@/src/utils/firebaseAuthUtils';
 import { readAllValidEventDbEntries } from '@/src/utils/firestoreUtils';
-import {
-  createEventDbEntryAndConfirm,
-  eventDbEntrySchema,
-} from '@/src/utils/firestoreUtils/firestoreEventsUtils';
+import { createEventDbEntryAndConfirm } from '@/src/utils/firestoreUtils/firestoreEventsUtils';
 import { Component, State, h } from '@stencil/core';
 import { v4 as uuid } from 'uuid';
-import { z } from 'zod';
-
-// type TEventsResponse = Awaited<ReturnType<typeof readAllValidEventDbEntries>>;
-// type TEventsResponseSuccess = Extract<TEventsResponse, { success: true }>;
-type TEvent = z.infer<typeof eventDbEntrySchema>;
-type TUiEvent = TEvent & { isNew?: boolean };
-type TEvents = TEvent[];
 
 @Component({
   tag: 'event-list',
@@ -23,12 +13,17 @@ type TEvents = TEvent[];
   shadow: true,
 })
 export class EventList {
-  @State() events?: TEvents = undefined;
+  @State() events?: {
+    id: string;
+    uid: string;
+    name: string;
+    createdAt: { seconds: number };
+    updatedAt: { seconds: number };
+  }[] = undefined;
   @State() showStartNeweventForm = true;
 
   async componentDidLoad() {
     const validEventDbEntriesResponse = await readAllValidEventDbEntries();
-    validEventDbEntriesResponse;
     if (validEventDbEntriesResponse.success) this.events = validEventDbEntriesResponse.data;
   }
 
@@ -76,6 +71,7 @@ export class EventList {
                 onCreateEventSuccess={e => {
                   console.log({ e: e.detail });
                   this.events = [...(this.events ?? []), e.detail];
+                  appDataStore.state.currentEvent = e.detail;
                 }}
               />
             </div>

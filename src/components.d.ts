@@ -5,8 +5,6 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { z } from "zod";
-export { z } from "zod";
 export namespace Components {
     interface ButtonContainer {
     }
@@ -197,7 +195,13 @@ declare global {
         new (): HTMLCaptureCycleGetStreamSettingsElement;
     };
     interface HTMLCreateNewEventFormElementEventMap {
-        "createEventSuccess": z.infer<typeof eventDbEntrySchema>;
+        "createEventSuccess": {
+    id: string;
+    uid: string;
+    name: string;
+    createdAt: { seconds: number };
+    updatedAt: { seconds: number };
+  };
     }
     interface HTMLCreateNewEventFormElement extends Components.CreateNewEventForm, HTMLStencilElement {
         addEventListener<K extends keyof HTMLCreateNewEventFormElementEventMap>(type: K, listener: (this: HTMLCreateNewEventFormElement, ev: CreateNewEventFormCustomEvent<HTMLCreateNewEventFormElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -353,7 +357,13 @@ declare namespace LocalJSX {
         "onInitSettingsError"?: (event: CaptureCycleGetStreamSettingsCustomEvent<string>) => void;
     }
     interface CreateNewEventForm {
-        "onCreateEventSuccess"?: (event: CreateNewEventFormCustomEvent<z.infer<typeof eventDbEntrySchema>>) => void;
+        "onCreateEventSuccess"?: (event: CreateNewEventFormCustomEvent<{
+    id: string;
+    uid: string;
+    name: string;
+    createdAt: { seconds: number };
+    updatedAt: { seconds: number };
+  }>) => void;
     }
     interface CustomH1 {
     }

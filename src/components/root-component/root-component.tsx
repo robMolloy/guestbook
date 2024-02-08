@@ -20,7 +20,6 @@ export class RootComponent {
   render() {
     return (
       <Host>
-        state:
         <pre>{JSON.stringify(appDataStore, undefined, 2)}</pre>
         <br />
         <button
@@ -30,8 +29,10 @@ export class RootComponent {
         >
           click
         </button>
-        {this.isLoggedIn === undefined && <span class="loading loading-spinner loading-lg" />}
-        {this.isLoggedIn === false && (
+        {appDataStore.state.isLoggedIn === undefined && (
+          <span class="loading loading-spinner loading-lg" />
+        )}
+        {appDataStore.state.isLoggedIn === false && (
           <div style={css({ display: 'flex', justifyContent: 'center', marginTop: '100px' })}>
             <div style={css({ minWidth: '450px' })}>
               {/* <capture-cycle /> */}
@@ -40,7 +41,7 @@ export class RootComponent {
             </div>
           </div>
         )}
-        {this.isLoggedIn === true && <event-list />}
+        {appDataStore.state.isLoggedIn === true && <event-list />}
       </Host>
     );
   }

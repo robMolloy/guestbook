@@ -5,7 +5,15 @@ export const appDataStore = createStore({
   user: undefined as undefined | User,
   uid: undefined as undefined | string,
   isLoggedIn: undefined as undefined | boolean,
-  currentEventId: undefined as undefined | string,
+  currentEvent: undefined as
+    | undefined
+    | {
+        id: string;
+        uid: string;
+        name: string;
+        createdAt: { seconds: number };
+        updatedAt: { seconds: number };
+      },
   theme: 'synthwave',
 });
 
