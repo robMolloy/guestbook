@@ -3,9 +3,13 @@ import { appDataStore } from '@/src/stores/appDataStore';
 import { css } from '@/src/utils/cssUtils';
 import { logoutFirebaseUser } from '@/src/utils/firebaseAuthUtils';
 import { readAllValidEventDbEntries } from '@/src/utils/firestoreUtils';
-import { createEventDbEntryAndConfirm } from '@/src/utils/firestoreUtils/firestoreEventsUtils';
+import {
+  createEventDbEntryAndConfirm,
+  eventDbEntrySchema,
+} from '@/src/utils/firestoreUtils/firestoreEventsUtils';
 import { Component, State, h } from '@stencil/core';
 import { v4 as uuid } from 'uuid';
+import { z } from 'zod';
 
 @Component({
   tag: 'event-list',
@@ -13,13 +17,7 @@ import { v4 as uuid } from 'uuid';
   shadow: true,
 })
 export class EventList {
-  @State() events?: {
-    id: string;
-    uid: string;
-    name: string;
-    createdAt: { seconds: number };
-    updatedAt: { seconds: number };
-  }[] = undefined;
+  @State() events?: z.infer<typeof eventDbEntrySchema>[] = undefined;
   @State() showStartNeweventForm = true;
 
   async componentDidLoad() {
