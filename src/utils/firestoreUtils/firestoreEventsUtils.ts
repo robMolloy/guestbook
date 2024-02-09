@@ -27,7 +27,6 @@ export const readAllValidEventDbEntries = async (p?: { ignoreErrors?: boolean })
     const items: TEventDbEntry[] = [];
     querySnapshot.forEach(doc => {
       const data = doc.data();
-      console.log({ data });
 
       const parseResponse = eventDbEntrySchema.safeParse(data);
       if (parseResponse.success) return items.push(parseResponse.data);

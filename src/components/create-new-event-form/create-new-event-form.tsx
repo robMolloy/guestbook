@@ -30,7 +30,6 @@ export class StartNewEventForm {
 
     await (async () => {
       const newEvent = { id: uuid(), uid: uid, name: this.eventName };
-      console.log({ newEvent });
 
       const createResponse = await createEventDbEntryAndConfirm(newEvent);
 

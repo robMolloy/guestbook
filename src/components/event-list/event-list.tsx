@@ -28,7 +28,6 @@ export class EventList {
   render() {
     return (
       <div data-theme="synthwave">
-        <pre>{JSON.stringify(appDataStore, undefined, 2)}</pre>
         <div>
           <button-container>
             <button onClick={() => logoutFirebaseUser()} class="btn btn-primary">
