@@ -1,3 +1,4 @@
+import appDataStore from '@/src/stores/appDataStore';
 import { css } from '@/src/utils/cssUtils';
 import { Component, State, h } from '@stencil/core';
 
@@ -15,7 +16,7 @@ export class UserAuthCard {
       <div
         class="card box"
         style={css({ boxShadow: '7px 7px 13px rgba(0, 0, 0, 0.5)' })}
-        data-theme="synthwave"
+        data-theme={appDataStore.state.theme}
       >
         <span role="tablist" class="tabs tabs-bordered">
           <a

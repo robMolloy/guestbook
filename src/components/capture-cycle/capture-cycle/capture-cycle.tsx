@@ -1,5 +1,6 @@
+import { css } from '@/src/utils/cssUtils';
 import { getStreamSettings } from '@/src/utils/streamUtils';
-import { Component, State, h } from '@stencil/core';
+import { Component, Host, State, h } from '@stencil/core';
 
 @Component({
   tag: 'capture-cycle',
@@ -32,6 +33,10 @@ export class CaptureCycle {
     if (this.status === 'loading') return <div>loading...</div>;
     if (this.status === 'error' || this.streamSettings === undefined) return <div>error...</div>;
     if (this.status === 'success')
-      return <dumb-capture-cycle streamSettings={this.streamSettings} />;
+      return (
+        <Host style={css({ flex: '1', display: 'flex' })}>
+          <dumb-capture-cycle streamSettings={this.streamSettings} />
+        </Host>
+      );
   }
 }

@@ -7,7 +7,7 @@ import {
   createEventDbEntryAndConfirm,
   eventDbEntrySchema,
 } from '@/src/utils/firestoreUtils/firestoreEventsUtils';
-import { Component, State, h } from '@stencil/core';
+import { Component, Host, State, h } from '@stencil/core';
 import { v4 as uuid } from 'uuid';
 import { z } from 'zod';
 
@@ -27,7 +27,7 @@ export class EventList {
 
   render() {
     return (
-      <div data-theme="synthwave">
+      <Host data-theme={appDataStore.state.theme} style={css({ flex: '1' })}>
         <div>
           <button-container>
             <button onClick={() => logoutFirebaseUser()} class="btn btn-primary">
@@ -81,7 +81,7 @@ export class EventList {
             this.events.length > 0 &&
             this.events.map(event => <div>{event.name}</div>)}
         </div>
-      </div>
+      </Host>
     );
   }
 }

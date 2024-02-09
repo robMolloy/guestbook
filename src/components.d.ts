@@ -56,7 +56,11 @@ export namespace Components {
     }
     interface HalfScreenSection {
     }
+    interface NavBar {
+    }
     interface RootComponent {
+    }
+    interface TestComp {
     }
     interface UserAuthCard {
     }
@@ -241,11 +245,23 @@ declare global {
         prototype: HTMLHalfScreenSectionElement;
         new (): HTMLHalfScreenSectionElement;
     };
+    interface HTMLNavBarElement extends Components.NavBar, HTMLStencilElement {
+    }
+    var HTMLNavBarElement: {
+        prototype: HTMLNavBarElement;
+        new (): HTMLNavBarElement;
+    };
     interface HTMLRootComponentElement extends Components.RootComponent, HTMLStencilElement {
     }
     var HTMLRootComponentElement: {
         prototype: HTMLRootComponentElement;
         new (): HTMLRootComponentElement;
+    };
+    interface HTMLTestCompElement extends Components.TestComp, HTMLStencilElement {
+    }
+    var HTMLTestCompElement: {
+        prototype: HTMLTestCompElement;
+        new (): HTMLTestCompElement;
     };
     interface HTMLUserAuthCardElement extends Components.UserAuthCard, HTMLStencilElement {
     }
@@ -304,7 +320,9 @@ declare global {
         "dumb-capture-cycle": HTMLDumbCaptureCycleElement;
         "event-list": HTMLEventListElement;
         "half-screen-section": HTMLHalfScreenSectionElement;
+        "nav-bar": HTMLNavBarElement;
         "root-component": HTMLRootComponentElement;
+        "test-comp": HTMLTestCompElement;
         "user-auth-card": HTMLUserAuthCardElement;
         "user-create-form": HTMLUserCreateFormElement;
         "user-login-form": HTMLUserLoginFormElement;
@@ -370,7 +388,11 @@ declare namespace LocalJSX {
     }
     interface HalfScreenSection {
     }
+    interface NavBar {
+    }
     interface RootComponent {
+    }
+    interface TestComp {
     }
     interface UserAuthCard {
     }
@@ -397,7 +419,9 @@ declare namespace LocalJSX {
         "dumb-capture-cycle": DumbCaptureCycle;
         "event-list": EventList;
         "half-screen-section": HalfScreenSection;
+        "nav-bar": NavBar;
         "root-component": RootComponent;
+        "test-comp": TestComp;
         "user-auth-card": UserAuthCard;
         "user-create-form": UserCreateForm;
         "user-login-form": UserLoginForm;
@@ -421,7 +445,9 @@ declare module "@stencil/core" {
             "dumb-capture-cycle": LocalJSX.DumbCaptureCycle & JSXBase.HTMLAttributes<HTMLDumbCaptureCycleElement>;
             "event-list": LocalJSX.EventList & JSXBase.HTMLAttributes<HTMLEventListElement>;
             "half-screen-section": LocalJSX.HalfScreenSection & JSXBase.HTMLAttributes<HTMLHalfScreenSectionElement>;
+            "nav-bar": LocalJSX.NavBar & JSXBase.HTMLAttributes<HTMLNavBarElement>;
             "root-component": LocalJSX.RootComponent & JSXBase.HTMLAttributes<HTMLRootComponentElement>;
+            "test-comp": LocalJSX.TestComp & JSXBase.HTMLAttributes<HTMLTestCompElement>;
             "user-auth-card": LocalJSX.UserAuthCard & JSXBase.HTMLAttributes<HTMLUserAuthCardElement>;
             "user-create-form": LocalJSX.UserCreateForm & JSXBase.HTMLAttributes<HTMLUserCreateFormElement>;
             "user-login-form": LocalJSX.UserLoginForm & JSXBase.HTMLAttributes<HTMLUserLoginFormElement>;

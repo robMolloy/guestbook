@@ -2,6 +2,7 @@ import { Component, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'capture-cycle-display-selected-photo',
+  styleUrl: '../../../styles/daisyUi.css',
   shadow: true,
 })
 export class DisplaySelectedPhoto {
@@ -11,10 +12,10 @@ export class DisplaySelectedPhoto {
     return (
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div
+          class="bg-primary"
           style={{
             height: '37vh',
             width: `${(37 * 6) / 4}vh`,
-            backgroundColor: '#eee',
             position: 'relative',
             backgroundImage: `url('${this.selectedImageDataUrl}')`,
             backgroundSize: 'cover',

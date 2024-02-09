@@ -1,6 +1,8 @@
+import appDataStore from '@/src/stores/appDataStore';
+import { css } from '@/src/utils/cssUtils';
 import { uploadSelectedImageAndConfirm, uploadBackupImage } from '@/src/utils/firestoreUtils';
 import { delay } from '@/src/utils/timeUtils';
-import { Component, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Host, Prop, State, Watch, h } from '@stencil/core';
 import { v4 as uuid } from 'uuid';
 
 type TStatus = CaptureCycle['status'];
@@ -91,79 +93,85 @@ export class CaptureCycle {
 
   render() {
     return (
-      <div
-        data-theme="synthwave"
-        style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}
-        onClick={() => this.runCaptureCycleIfStatusReady()}
-      >
-        {i18n.captureCycle.heading[this.status] && (
-          <custom-h1>{i18n.captureCycle.heading[this.status]}</custom-h1>
-        )}
+      <Host data-theme={appDataStore.state.theme} style={css({ flex: '1', display: 'flex' })}>
+        <div
+          style={css({
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+          })}
+          onClick={() => this.runCaptureCycleIfStatusReady()}
+        >
+          {i18n.captureCycle.heading[this.status] && (
+            <custom-h1>{i18n.captureCycle.heading[this.status]}</custom-h1>
+          )}
 
-        {(this.status === 'ready' || this.status === 'capturing') && !!this.streamSettings && (
-          <capture-cycle-display-stream
-            ref={elm => (this.displayStreamElement = elm)}
-            streamSettings={this.streamSettings}
-          />
-        )}
-        {(this.status === 'selecting' || this.status === 'sending') && (
-          <capture-cycle-display-selected-photo
-            selectedImageDataUrl={this.selectedImageDataUrl}
-            ref={elm => (this.displaySelectedPhotoElement = elm)}
-          />
-        )}
-        {this.status === 'sending' && (
-          <button-container>
-            <span class="loading loading-spinner loading-lg"></span>
-          </button-container>
-        )}
-        {(this.status === 'selecting' || this.status === 'capturing') && (
-          <button-container>
-            <button
-              class="btn btn-primary"
-              disabled={this.selectedImageDataUrl === undefined || this.status === 'capturing'}
-              onClick={async () => {
-                if (this.status !== 'sending') this.sendSelectedImageDataUrl();
-              }}
-            >
-              Choose photo
-            </button>
-            <button
-              class="btn btn-accent"
-              disabled={this.status === 'capturing'}
-              onClick={() => {
-                if ((this.status = 'selecting')) this.status = 'preReady';
-              }}
-            >
-              Start again
-            </button>
-          </button-container>
-        )}
-
-        {(this.status === 'capturing' ||
-          this.status === 'selecting' ||
-          this.status === 'sending') && (
-          <div style={{ flex: '1' }}>
-            <capture-cycle-display-photo-grid
-              ref={elm => (this.displayPhotoGridElement = elm)}
-              onSelectPhoto={e => {
-                if (this.status === 'selecting') this.selectedImageDataUrl = e.detail;
-              }}
+          {(this.status === 'ready' || this.status === 'capturing') && !!this.streamSettings && (
+            <capture-cycle-display-stream
+              ref={elm => (this.displayStreamElement = elm)}
+              streamSettings={this.streamSettings}
             />
-          </div>
-        )}
-        {this.status === 'success' && (
-          <capture-cycle-confirm-photo-success-screen
-            onStartAgainClick={() => (this.status = 'preReady')}
-          />
-        )}
-        {this.status === 'fail' && (
-          <capture-cycle-confirm-photo-fail-screen
-            onStartAgainClick={() => (this.status = 'preReady')}
-          />
-        )}
-        <br />
-      </div>
+          )}
+          {(this.status === 'selecting' || this.status === 'sending') && (
+            <capture-cycle-display-selected-photo
+              selectedImageDataUrl={this.selectedImageDataUrl}
+              ref={elm => (this.displaySelectedPhotoElement = elm)}
+            />
+          )}
+          {this.status === 'sending' && (
+            <button-container>
+              <span class="loading loading-spinner loading-lg"></span>
+            </button-container>
+          )}
+          {(this.status === 'selecting' || this.status === 'capturing') && (
+            <button-container>
+              <button
+                data-theme={appDataStore.state.theme}
+                class="btn btn-primary"
+                disabled={this.selectedImageDataUrl === undefined || this.status === 'capturing'}
+                onClick={async () => {
+                  if (this.status !== 'sending') this.sendSelectedImageDataUrl();
+                }}
+              >
+                Choose photo
+              </button>
+              <button
+                class="btn btn-accent"
+                disabled={this.status === 'capturing'}
+                onClick={() => {
+                  if ((this.status = 'selecting')) this.status = 'preReady';
+                }}
+              >
+                Start again
+              </button>
+            </button-container>
+          )}
+
+          {(this.status === 'capturing' ||
+            this.status === 'selecting' ||
+            this.status === 'sending') && (
+            <div style={{ flex: '1' }}>
+              <capture-cycle-display-photo-grid
+                ref={elm => (this.displayPhotoGridElement = elm)}
+                onSelectPhoto={e => {
+                  if (this.status === 'selecting') this.selectedImageDataUrl = e.detail;
+                }}
+              />
+            </div>
+          )}
+          {this.status === 'success' && (
+            <capture-cycle-confirm-photo-success-screen
+              onStartAgainClick={() => (this.status = 'preReady')}
+            />
+          )}
+          {this.status === 'fail' && (
+            <capture-cycle-confirm-photo-fail-screen
+              onStartAgainClick={() => (this.status = 'preReady')}
+            />
+          )}
+          <br />
+        </div>
+      </Host>
     );
   }
 }
