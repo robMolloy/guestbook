@@ -12,7 +12,7 @@ export class NavBar {
   render() {
     return (
       <Host>
-        <div class="navbar bg-primary" data-theme={appDataStore.state.theme}>
+        <div class="navbar bg-primary text-primary-content" data-theme={appDataStore.state.theme}>
           <div style={css({ flex: '1' })}>
             <a class="btn btn-ghost text-xl">open guestbook</a>
           </div>
@@ -25,7 +25,7 @@ export class NavBar {
                 <details>
                   <summary>Theme</summary>
                   <ul
-                    class="p-2 bg-secondary rounded-t-none"
+                    class="p-2 bg-secondary text-secondary-content rounded-t-none"
                     style={css({ overflow: 'scroll', maxHeight: '40vh', zIndex: '99' })}
                   >
                     {appDataStore.state.availableThemes.map(x => (

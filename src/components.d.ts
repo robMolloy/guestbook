@@ -43,6 +43,8 @@ export namespace Components {
     }
     interface CustomH2 {
     }
+    interface CustomH3 {
+    }
     interface DumbCaptureCycle {
         "streamSettings": {
     videoElementWidth: number;
@@ -52,9 +54,19 @@ export namespace Components {
     aspectRatio: number;
   };
     }
+    interface EventForm {
+    }
     interface EventList {
     }
+    interface EventListOld {
+    }
+    interface EventsCard {
+    }
+    interface EventsScreen {
+    }
     interface HalfScreenSection {
+    }
+    interface LoadingScreen {
     }
     interface NavBar {
     }
@@ -63,6 +75,8 @@ export namespace Components {
     interface TestComp {
     }
     interface UserAuthCard {
+    }
+    interface UserAuthScreen {
     }
     interface UserCreateForm {
     }
@@ -227,11 +241,23 @@ declare global {
         prototype: HTMLCustomH2Element;
         new (): HTMLCustomH2Element;
     };
+    interface HTMLCustomH3Element extends Components.CustomH3, HTMLStencilElement {
+    }
+    var HTMLCustomH3Element: {
+        prototype: HTMLCustomH3Element;
+        new (): HTMLCustomH3Element;
+    };
     interface HTMLDumbCaptureCycleElement extends Components.DumbCaptureCycle, HTMLStencilElement {
     }
     var HTMLDumbCaptureCycleElement: {
         prototype: HTMLDumbCaptureCycleElement;
         new (): HTMLDumbCaptureCycleElement;
+    };
+    interface HTMLEventFormElement extends Components.EventForm, HTMLStencilElement {
+    }
+    var HTMLEventFormElement: {
+        prototype: HTMLEventFormElement;
+        new (): HTMLEventFormElement;
     };
     interface HTMLEventListElement extends Components.EventList, HTMLStencilElement {
     }
@@ -239,11 +265,35 @@ declare global {
         prototype: HTMLEventListElement;
         new (): HTMLEventListElement;
     };
+    interface HTMLEventListOldElement extends Components.EventListOld, HTMLStencilElement {
+    }
+    var HTMLEventListOldElement: {
+        prototype: HTMLEventListOldElement;
+        new (): HTMLEventListOldElement;
+    };
+    interface HTMLEventsCardElement extends Components.EventsCard, HTMLStencilElement {
+    }
+    var HTMLEventsCardElement: {
+        prototype: HTMLEventsCardElement;
+        new (): HTMLEventsCardElement;
+    };
+    interface HTMLEventsScreenElement extends Components.EventsScreen, HTMLStencilElement {
+    }
+    var HTMLEventsScreenElement: {
+        prototype: HTMLEventsScreenElement;
+        new (): HTMLEventsScreenElement;
+    };
     interface HTMLHalfScreenSectionElement extends Components.HalfScreenSection, HTMLStencilElement {
     }
     var HTMLHalfScreenSectionElement: {
         prototype: HTMLHalfScreenSectionElement;
         new (): HTMLHalfScreenSectionElement;
+    };
+    interface HTMLLoadingScreenElement extends Components.LoadingScreen, HTMLStencilElement {
+    }
+    var HTMLLoadingScreenElement: {
+        prototype: HTMLLoadingScreenElement;
+        new (): HTMLLoadingScreenElement;
     };
     interface HTMLNavBarElement extends Components.NavBar, HTMLStencilElement {
     }
@@ -268,6 +318,12 @@ declare global {
     var HTMLUserAuthCardElement: {
         prototype: HTMLUserAuthCardElement;
         new (): HTMLUserAuthCardElement;
+    };
+    interface HTMLUserAuthScreenElement extends Components.UserAuthScreen, HTMLStencilElement {
+    }
+    var HTMLUserAuthScreenElement: {
+        prototype: HTMLUserAuthScreenElement;
+        new (): HTMLUserAuthScreenElement;
     };
     interface HTMLUserCreateFormElementEventMap {
         "createUserSuccess": any;
@@ -317,13 +373,20 @@ declare global {
         "create-new-event-form": HTMLCreateNewEventFormElement;
         "custom-h1": HTMLCustomH1Element;
         "custom-h2": HTMLCustomH2Element;
+        "custom-h3": HTMLCustomH3Element;
         "dumb-capture-cycle": HTMLDumbCaptureCycleElement;
+        "event-form": HTMLEventFormElement;
         "event-list": HTMLEventListElement;
+        "event-list-old": HTMLEventListOldElement;
+        "events-card": HTMLEventsCardElement;
+        "events-screen": HTMLEventsScreenElement;
         "half-screen-section": HTMLHalfScreenSectionElement;
+        "loading-screen": HTMLLoadingScreenElement;
         "nav-bar": HTMLNavBarElement;
         "root-component": HTMLRootComponentElement;
         "test-comp": HTMLTestCompElement;
         "user-auth-card": HTMLUserAuthCardElement;
+        "user-auth-screen": HTMLUserAuthScreenElement;
         "user-create-form": HTMLUserCreateFormElement;
         "user-login-form": HTMLUserLoginFormElement;
     }
@@ -375,6 +438,8 @@ declare namespace LocalJSX {
     }
     interface CustomH2 {
     }
+    interface CustomH3 {
+    }
     interface DumbCaptureCycle {
         "streamSettings": {
     videoElementWidth: number;
@@ -384,9 +449,19 @@ declare namespace LocalJSX {
     aspectRatio: number;
   };
     }
+    interface EventForm {
+    }
     interface EventList {
     }
+    interface EventListOld {
+    }
+    interface EventsCard {
+    }
+    interface EventsScreen {
+    }
     interface HalfScreenSection {
+    }
+    interface LoadingScreen {
     }
     interface NavBar {
     }
@@ -395,6 +470,8 @@ declare namespace LocalJSX {
     interface TestComp {
     }
     interface UserAuthCard {
+    }
+    interface UserAuthScreen {
     }
     interface UserCreateForm {
         "onCreateUserFail"?: (event: UserCreateFormCustomEvent<any>) => void;
@@ -416,13 +493,20 @@ declare namespace LocalJSX {
         "create-new-event-form": CreateNewEventForm;
         "custom-h1": CustomH1;
         "custom-h2": CustomH2;
+        "custom-h3": CustomH3;
         "dumb-capture-cycle": DumbCaptureCycle;
+        "event-form": EventForm;
         "event-list": EventList;
+        "event-list-old": EventListOld;
+        "events-card": EventsCard;
+        "events-screen": EventsScreen;
         "half-screen-section": HalfScreenSection;
+        "loading-screen": LoadingScreen;
         "nav-bar": NavBar;
         "root-component": RootComponent;
         "test-comp": TestComp;
         "user-auth-card": UserAuthCard;
+        "user-auth-screen": UserAuthScreen;
         "user-create-form": UserCreateForm;
         "user-login-form": UserLoginForm;
     }
@@ -442,13 +526,20 @@ declare module "@stencil/core" {
             "create-new-event-form": LocalJSX.CreateNewEventForm & JSXBase.HTMLAttributes<HTMLCreateNewEventFormElement>;
             "custom-h1": LocalJSX.CustomH1 & JSXBase.HTMLAttributes<HTMLCustomH1Element>;
             "custom-h2": LocalJSX.CustomH2 & JSXBase.HTMLAttributes<HTMLCustomH2Element>;
+            "custom-h3": LocalJSX.CustomH3 & JSXBase.HTMLAttributes<HTMLCustomH3Element>;
             "dumb-capture-cycle": LocalJSX.DumbCaptureCycle & JSXBase.HTMLAttributes<HTMLDumbCaptureCycleElement>;
+            "event-form": LocalJSX.EventForm & JSXBase.HTMLAttributes<HTMLEventFormElement>;
             "event-list": LocalJSX.EventList & JSXBase.HTMLAttributes<HTMLEventListElement>;
+            "event-list-old": LocalJSX.EventListOld & JSXBase.HTMLAttributes<HTMLEventListOldElement>;
+            "events-card": LocalJSX.EventsCard & JSXBase.HTMLAttributes<HTMLEventsCardElement>;
+            "events-screen": LocalJSX.EventsScreen & JSXBase.HTMLAttributes<HTMLEventsScreenElement>;
             "half-screen-section": LocalJSX.HalfScreenSection & JSXBase.HTMLAttributes<HTMLHalfScreenSectionElement>;
+            "loading-screen": LocalJSX.LoadingScreen & JSXBase.HTMLAttributes<HTMLLoadingScreenElement>;
             "nav-bar": LocalJSX.NavBar & JSXBase.HTMLAttributes<HTMLNavBarElement>;
             "root-component": LocalJSX.RootComponent & JSXBase.HTMLAttributes<HTMLRootComponentElement>;
             "test-comp": LocalJSX.TestComp & JSXBase.HTMLAttributes<HTMLTestCompElement>;
             "user-auth-card": LocalJSX.UserAuthCard & JSXBase.HTMLAttributes<HTMLUserAuthCardElement>;
+            "user-auth-screen": LocalJSX.UserAuthScreen & JSXBase.HTMLAttributes<HTMLUserAuthScreenElement>;
             "user-create-form": LocalJSX.UserCreateForm & JSXBase.HTMLAttributes<HTMLUserCreateFormElement>;
             "user-login-form": LocalJSX.UserLoginForm & JSXBase.HTMLAttributes<HTMLUserLoginFormElement>;
         }

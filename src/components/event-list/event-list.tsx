@@ -1,15 +1,11 @@
-import { auth } from '@/src/config/firebase-config';
 import { appDataStore } from '@/src/stores/appDataStore';
-import { css } from '@/src/utils/cssUtils';
-import { logoutFirebaseUser } from '@/src/utils/firebaseAuthUtils';
 import { readAllValidEventDbEntries } from '@/src/utils/firestoreUtils';
-import {
-  createEventDbEntryAndConfirm,
-  eventDbEntrySchema,
-} from '@/src/utils/firestoreUtils/firestoreEventsUtils';
+import { eventDbEntrySchema } from '@/src/utils/firestoreUtils/firestoreEventsUtils';
 import { Component, Host, State, h } from '@stencil/core';
-import { v4 as uuid } from 'uuid';
 import { z } from 'zod';
+import dayjs from 'dayjs';
+import calendar from 'dayjs/plugin/calendar';
+dayjs.extend(calendar);
 
 @Component({
   tag: 'event-list',
@@ -18,7 +14,6 @@ import { z } from 'zod';
 })
 export class EventList {
   @State() events?: z.infer<typeof eventDbEntrySchema>[] = undefined;
-  @State() showStartNeweventForm = true;
 
   async componentDidLoad() {
     const validEventDbEntriesResponse = await readAllValidEventDbEntries();
@@ -27,60 +22,50 @@ export class EventList {
 
   render() {
     return (
-      <Host data-theme={appDataStore.state.theme} style={css({ flex: '1' })}>
-        <div>
+      <Host data-theme={appDataStore.state.theme}>
+        {this.events === undefined && (
           <button-container>
-            <button onClick={() => logoutFirebaseUser()} class="btn btn-primary">
-              Log out
-            </button>
-
-            <button
-              onClick={async () => {
-                const uid = auth.currentUser?.uid;
-                if (!uid) return;
-                const payload = { id: uuid(), uid, name: `some event: ${uuid()}` };
-                const createResponse = await createEventDbEntryAndConfirm(payload);
-
-                if (!createResponse.success) return;
-
-                this.events = [...(this.events ?? []), createResponse.data];
-              }}
-              class="btn btn-primary"
-            >
-              Add event
-            </button>
-            <button
-              onClick={async () => (this.showStartNeweventForm = !this.showStartNeweventForm)}
-              class="btn btn-primary"
-            >
-              Start new event
-            </button>
+            <span class="loading loading-spinner loading-lg" />
           </button-container>
+        )}
 
-          {this.events === undefined && (
-            <div>You don't seem to have any events at the moment, start a new event belo</div>
-          )}
+        {!!this.events && this.events.length === 0 && (
+          <div>You have not started any events yet, click below to start</div>
+        )}
 
-          {this.showStartNeweventForm && (
-            <div style={css({ width: '450px' })}>
-              <br />
-              <create-new-event-form
-                onCreateEventSuccess={e => {
-                  console.log({ e: e.detail });
-                  this.events = [...(this.events ?? []), e.detail];
-                  appDataStore.state.currentEvent = e.detail;
-                }}
-              />
-            </div>
-          )}
-
-          {!!this.events && this.events.length === 0 && (
-            <div>You have not started any events yet, click below to start</div>
-          )}
-          {!!this.events &&
-            this.events.length > 0 &&
-            this.events.map(event => <div>{event.name}</div>)}
-        </div>
+        {!!this.events && this.events.length > 0 && (
+          <div class="overflow-x-auto">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th># </th>
+                  <th>Name</th>
+                  <th>Created At</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {!!this.events &&
+                  this.events.length > 0 &&
+                  this.events.map((event, j) => (
+                    <tr>
+                      <th>{j + 1}</th>
+                      <td>{event.name}</td>
+                      <td>{event.createdAt}</td>
+                      <td>
+                        <button
+                          class="btn btn-primary btn-sm"
+                          onClick={() => (appDataStore.state.currentEvent = event)}
+                        >
+                          View Event
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </Host>
     );
   }

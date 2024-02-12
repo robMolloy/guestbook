@@ -1,5 +1,6 @@
 import { db } from '@/src/config/firebase-config';
-import { serverTimestamp, collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import dayjs from 'dayjs';
+import { collection, doc, getDoc, getDocs, serverTimestamp, setDoc } from 'firebase/firestore';
 import { z } from 'zod';
 
 const collectionName = 'events';
@@ -13,8 +14,8 @@ export const eventDbEntrySchema = z.object({
   id: z.string(),
   uid: z.string(),
   name: z.string(),
-  createdAt: z.object({ seconds: z.number() }),
-  updatedAt: z.object({ seconds: z.number() }),
+  createdAt: z.string(),
+  updatedAt: z.string(),
 });
 export type TEventDbEntrySeed = z.infer<typeof eventDbEntrySeedSchema>;
 export type TEventDbEntry = z.infer<typeof eventDbEntrySchema>;
@@ -26,7 +27,22 @@ export const readAllValidEventDbEntries = async (p?: { ignoreErrors?: boolean })
 
     const items: TEventDbEntry[] = [];
     querySnapshot.forEach(doc => {
-      const data = doc.data();
+      const initData = doc.data();
+      const data = {
+        ...initData,
+        createdAt: (() => {
+          const date = dayjs(initData?.createdAt?.toDate());
+
+          const rtn = !!date ? date.format('D MMM YYYY hh:mm') : undefined;
+          console.log({ date, rtn });
+          return rtn;
+        })(),
+        updatedAt: (() => {
+          const date = initData?.updatedAt?.toDate();
+          return !!date ? dayjs().calendar(dayjs(date)) : undefined;
+        })(),
+      };
+      // console.log(data);
 
       const parseResponse = eventDbEntrySchema.safeParse(data);
       if (parseResponse.success) return items.push(parseResponse.data);
@@ -79,7 +95,19 @@ export const readEventDbEntry = async (id: string) => {
   if (!docSnap.exists())
     return { success: false, error: { message: `doc with id "${id}" not found` } } as const;
 
-  return eventDbEntrySchema.safeParse({ id, ...docSnap.data() });
+  const initData = docSnap.data();
+  const data = {
+    ...initData,
+    createdAt: (() => {
+      const date = initData?.createdAt?.toDate();
+      return !!date ? dayjs(date).format('D MMM YYYY') : undefined;
+    })(),
+    updatedAt: (() => {
+      const date = initData?.updatedAt?.toDate();
+      return !!date ? dayjs(date).format('D MMM YYYY') : undefined;
+    })(),
+  };
+  return eventDbEntrySchema.safeParse({ id, ...data });
 };
 
 export const createEventDbEntryAndConfirm = async (data: TEventDbEntrySeed) => {

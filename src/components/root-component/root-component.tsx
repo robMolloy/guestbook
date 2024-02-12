@@ -26,18 +26,14 @@ export class RootComponent {
           })}
         >
           <nav-bar />
-          <div style={css({ flex: '1', display: 'flex', alignItems: 'stretch' })}>
-            {appDataStore.state.status === 'loading' && (
-              <span class="loading loading-spinner loading-lg" />
-            )}
+          <div style={css({ flex: '1', display: 'flex' })}>
+            {appDataStore.state.status === 'loading' && <loading-screen />}
             {appDataStore.state.status === 'logged_out' && (
-              <div style={css({ display: 'flex', justifyContent: 'center', marginTop: '100px' })}>
-                <div style={css({ minWidth: '450px' })}>
-                  <user-auth-card />
-                </div>
-              </div>
+              <user-auth-screen style={css({ minWidth: '100%' })} />
             )}
-            {appDataStore.state.status === 'logged_in_choose_event' && <event-list />}
+            {appDataStore.state.status === 'logged_in_choose_event' && (
+              <events-screen style={css({ minWidth: '100%' })} />
+            )}
             {appDataStore.state.status === 'logged_in_capturing' && <capture-cycle />}
           </div>
         </div>
