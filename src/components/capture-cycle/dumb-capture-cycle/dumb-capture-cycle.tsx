@@ -24,6 +24,7 @@ const i18n = {
 })
 export class CaptureCycle {
   @State() selectedImageDataUrl?: string = undefined;
+  @State() groupId?: string;
   @State() status:
     | 'loading'
     | 'preReady'
@@ -49,6 +50,7 @@ export class CaptureCycle {
   @Watch('status') watchPropHandler() {
     if (this.status === 'preReady') {
       this.selectedImageDataUrl = undefined;
+      this.groupId = uuid();
       // TODO: fix: setTimeout used to delay restart as it recognises the status ready click causing the start cycle
       setTimeout(() => (this.status = 'ready'), 100);
     }
@@ -62,10 +64,16 @@ export class CaptureCycle {
     this.status = 'sending';
     if (!this.selectedImageDataUrl) return;
 
-    const resp = await uploadSelectedImageAndConfirm({
-      id: uuid(),
-      imageDataUrl: this.selectedImageDataUrl,
-    });
+    const resp =
+      !!appDataStore.state.currentEventId && !!appDataStore.state.user?.uid && !!this.groupId
+        ? await uploadSelectedImageAndConfirm({
+            id: uuid(),
+            groupId: this.groupId,
+            eventId: appDataStore.state.currentEventId,
+            userId: appDataStore.state.user.uid,
+            imageDataUrl: this.selectedImageDataUrl,
+          })
+        : ({ success: false } as const);
 
     this.status = resp.success ? 'success' : 'fail';
   }
@@ -77,14 +85,20 @@ export class CaptureCycle {
     if (!this.displayStreamElement) return;
     await this.displayStreamElement.countdown({ start: 3, stop: 0, clear: true });
 
-    const groupId = uuid();
-
     for (const _ of [0, 1, 2, 3]) {
       const imageDataUrl = await this.displayStreamElement.capture();
       if (!imageDataUrl || !this.displayPhotoGridElement) return;
 
       await this.displayPhotoGridElement.addImageDataUrls(imageDataUrl);
-      uploadBackupImage({ id: uuid(), imageDataUrl, groupId });
+
+      if (this.groupId && appDataStore.state.currentEventId && appDataStore.state.user?.uid)
+        uploadBackupImage({
+          id: uuid(),
+          eventId: appDataStore.state.currentEventId,
+          userId: appDataStore.state.user.uid,
+          imageDataUrl,
+          groupId: this.groupId,
+        });
 
       await delay(2000);
     }

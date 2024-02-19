@@ -68,7 +68,17 @@ export namespace Components {
     }
     interface LoadingScreen {
     }
+    interface ManageEvent {
+    }
     interface NavBar {
+    }
+    interface RmButton {
+        "color"?: 'primary';
+    }
+    interface RmCard {
+        "heading"?: string;
+    }
+    interface RmLayout {
     }
     interface RootComponent {
     }
@@ -295,11 +305,35 @@ declare global {
         prototype: HTMLLoadingScreenElement;
         new (): HTMLLoadingScreenElement;
     };
+    interface HTMLManageEventElement extends Components.ManageEvent, HTMLStencilElement {
+    }
+    var HTMLManageEventElement: {
+        prototype: HTMLManageEventElement;
+        new (): HTMLManageEventElement;
+    };
     interface HTMLNavBarElement extends Components.NavBar, HTMLStencilElement {
     }
     var HTMLNavBarElement: {
         prototype: HTMLNavBarElement;
         new (): HTMLNavBarElement;
+    };
+    interface HTMLRmButtonElement extends Components.RmButton, HTMLStencilElement {
+    }
+    var HTMLRmButtonElement: {
+        prototype: HTMLRmButtonElement;
+        new (): HTMLRmButtonElement;
+    };
+    interface HTMLRmCardElement extends Components.RmCard, HTMLStencilElement {
+    }
+    var HTMLRmCardElement: {
+        prototype: HTMLRmCardElement;
+        new (): HTMLRmCardElement;
+    };
+    interface HTMLRmLayoutElement extends Components.RmLayout, HTMLStencilElement {
+    }
+    var HTMLRmLayoutElement: {
+        prototype: HTMLRmLayoutElement;
+        new (): HTMLRmLayoutElement;
     };
     interface HTMLRootComponentElement extends Components.RootComponent, HTMLStencilElement {
     }
@@ -382,7 +416,11 @@ declare global {
         "events-screen": HTMLEventsScreenElement;
         "half-screen-section": HTMLHalfScreenSectionElement;
         "loading-screen": HTMLLoadingScreenElement;
+        "manage-event": HTMLManageEventElement;
         "nav-bar": HTMLNavBarElement;
+        "rm-button": HTMLRmButtonElement;
+        "rm-card": HTMLRmCardElement;
+        "rm-layout": HTMLRmLayoutElement;
         "root-component": HTMLRootComponentElement;
         "test-comp": HTMLTestCompElement;
         "user-auth-card": HTMLUserAuthCardElement;
@@ -463,7 +501,17 @@ declare namespace LocalJSX {
     }
     interface LoadingScreen {
     }
+    interface ManageEvent {
+    }
     interface NavBar {
+    }
+    interface RmButton {
+        "color"?: 'primary';
+    }
+    interface RmCard {
+        "heading"?: string;
+    }
+    interface RmLayout {
     }
     interface RootComponent {
     }
@@ -502,7 +550,11 @@ declare namespace LocalJSX {
         "events-screen": EventsScreen;
         "half-screen-section": HalfScreenSection;
         "loading-screen": LoadingScreen;
+        "manage-event": ManageEvent;
         "nav-bar": NavBar;
+        "rm-button": RmButton;
+        "rm-card": RmCard;
+        "rm-layout": RmLayout;
         "root-component": RootComponent;
         "test-comp": TestComp;
         "user-auth-card": UserAuthCard;
@@ -535,7 +587,11 @@ declare module "@stencil/core" {
             "events-screen": LocalJSX.EventsScreen & JSXBase.HTMLAttributes<HTMLEventsScreenElement>;
             "half-screen-section": LocalJSX.HalfScreenSection & JSXBase.HTMLAttributes<HTMLHalfScreenSectionElement>;
             "loading-screen": LocalJSX.LoadingScreen & JSXBase.HTMLAttributes<HTMLLoadingScreenElement>;
+            "manage-event": LocalJSX.ManageEvent & JSXBase.HTMLAttributes<HTMLManageEventElement>;
             "nav-bar": LocalJSX.NavBar & JSXBase.HTMLAttributes<HTMLNavBarElement>;
+            "rm-button": LocalJSX.RmButton & JSXBase.HTMLAttributes<HTMLRmButtonElement>;
+            "rm-card": LocalJSX.RmCard & JSXBase.HTMLAttributes<HTMLRmCardElement>;
+            "rm-layout": LocalJSX.RmLayout & JSXBase.HTMLAttributes<HTMLRmLayoutElement>;
             "root-component": LocalJSX.RootComponent & JSXBase.HTMLAttributes<HTMLRootComponentElement>;
             "test-comp": LocalJSX.TestComp & JSXBase.HTMLAttributes<HTMLTestCompElement>;
             "user-auth-card": LocalJSX.UserAuthCard & JSXBase.HTMLAttributes<HTMLUserAuthCardElement>;

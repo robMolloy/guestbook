@@ -39,12 +39,19 @@ const themes = [
 ] as const;
 
 export const appDataStore = createStore({
-  status: 'loading' as 'loading' | 'logged_out' | 'logged_in_capturing' | 'logged_in_choose_event',
+  status: 'loading' as
+    | 'loading'
+    | 'logged_out'
+    | 'managing_event'
+    | 'choosing_event'
+    | 'capturing_event',
   user: undefined as undefined | null | User,
   uid: undefined as undefined | null | string,
   isLoggedIn: undefined as undefined | boolean,
   currentEvent: undefined as undefined | z.infer<typeof eventDbEntrySchema>,
   currentEventId: undefined as undefined | string,
+  allEvents: undefined as undefined | z.infer<typeof eventDbEntrySchema>[],
+  eventMode: undefined as undefined | 'capturing' | 'managing',
   availableThemes: themes,
   theme: 'synthwave' as (typeof themes)[number],
 });
@@ -64,9 +71,19 @@ appDataStore.on('set', () => {
   if (appDataStore.state.isLoggedIn === false) appDataStore.state.status = 'logged_out';
 
   if (appDataStore.state.isLoggedIn === true && !appDataStore.state.currentEventId)
-    appDataStore.state.status = 'logged_in_choose_event';
-  if (appDataStore.state.isLoggedIn === true && !!appDataStore.state.currentEventId)
-    appDataStore.state.status = 'logged_in_capturing';
+    appDataStore.state.status = 'choosing_event';
+  if (
+    appDataStore.state.isLoggedIn === true &&
+    !!appDataStore.state.currentEventId &&
+    appDataStore.state.eventMode === 'capturing'
+  )
+    appDataStore.state.status = 'capturing_event';
+  if (
+    appDataStore.state.isLoggedIn === true &&
+    !!appDataStore.state.currentEventId &&
+    appDataStore.state.eventMode === 'managing'
+  )
+    appDataStore.state.status = 'managing_event';
 });
 
 export default appDataStore;

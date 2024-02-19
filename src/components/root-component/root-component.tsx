@@ -1,6 +1,7 @@
 import { auth } from '@/src/config/firebase-config';
 import { appDataStore } from '@/src/stores/appDataStore';
 import { css } from '@/src/utils/cssUtils';
+import { readAllValidEventDbEntries } from '@/src/utils/firestoreUtils';
 import { Component, Host, h } from '@stencil/core';
 import { onAuthStateChanged } from 'firebase/auth';
 
@@ -11,8 +12,16 @@ import { onAuthStateChanged } from 'firebase/auth';
 })
 export class RootComponent {
   componentWillLoad() {
-    onAuthStateChanged(auth, user => {
+    onAuthStateChanged(auth, async user => {
+      if (!user) appDataStore.reset();
       appDataStore.set('user', !!user ? user : null);
+
+      if (!!user) {
+        const response = await readAllValidEventDbEntries();
+
+        if (!response.success) return;
+        appDataStore.state.allEvents = response.data;
+      }
     });
   }
   render() {
@@ -31,10 +40,11 @@ export class RootComponent {
             {appDataStore.state.status === 'logged_out' && (
               <user-auth-screen style={css({ minWidth: '100%' })} />
             )}
-            {appDataStore.state.status === 'logged_in_choose_event' && (
+            {appDataStore.state.status === 'choosing_event' && (
               <events-screen style={css({ minWidth: '100%' })} />
             )}
-            {appDataStore.state.status === 'logged_in_capturing' && <capture-cycle />}
+            {appDataStore.state.status === 'capturing_event' && <capture-cycle />}
+            {appDataStore.state.status === 'managing_event' && <manage-event />}
           </div>
         </div>
       </Host>

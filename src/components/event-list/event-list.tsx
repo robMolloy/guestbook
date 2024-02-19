@@ -1,8 +1,5 @@
 import { appDataStore } from '@/src/stores/appDataStore';
-import { readAllValidEventDbEntries } from '@/src/utils/firestoreUtils';
-import { eventDbEntrySchema } from '@/src/utils/firestoreUtils/firestoreEventsUtils';
-import { Component, Host, State, h } from '@stencil/core';
-import { z } from 'zod';
+import { Component, Host, h } from '@stencil/core';
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
 dayjs.extend(calendar);
@@ -13,27 +10,20 @@ dayjs.extend(calendar);
   shadow: true,
 })
 export class EventList {
-  @State() events?: z.infer<typeof eventDbEntrySchema>[] = undefined;
-
-  async componentDidLoad() {
-    const validEventDbEntriesResponse = await readAllValidEventDbEntries();
-    if (validEventDbEntriesResponse.success) this.events = validEventDbEntriesResponse.data;
-  }
-
   render() {
     return (
       <Host data-theme={appDataStore.state.theme}>
-        {this.events === undefined && (
+        {appDataStore.state.allEvents === undefined && (
           <button-container>
             <span class="loading loading-spinner loading-lg" />
           </button-container>
         )}
 
-        {!!this.events && this.events.length === 0 && (
+        {!!appDataStore.state.allEvents && appDataStore.state.allEvents.length === 0 && (
           <div>You have not started any events yet, click below to start</div>
         )}
 
-        {!!this.events && this.events.length > 0 && (
+        {!!appDataStore.state.allEvents && appDataStore.state.allEvents.length > 0 && (
           <div class="overflow-x-auto">
             <table class="table">
               <thead>
@@ -45,9 +35,9 @@ export class EventList {
                 </tr>
               </thead>
               <tbody>
-                {!!this.events &&
-                  this.events.length > 0 &&
-                  this.events.map((event, j) => (
+                {!!appDataStore.state.allEvents &&
+                  appDataStore.state.allEvents.length > 0 &&
+                  appDataStore.state.allEvents.map((event, j) => (
                     <tr>
                       <th>{j + 1}</th>
                       <td>{event.name}</td>
@@ -55,7 +45,10 @@ export class EventList {
                       <td>
                         <button
                           class="btn btn-primary btn-sm"
-                          onClick={() => (appDataStore.state.currentEvent = event)}
+                          onClick={() => {
+                            appDataStore.state.currentEvent = event;
+                            appDataStore.state.eventMode = 'managing';
+                          }}
                         >
                           View Event
                         </button>

@@ -23,7 +23,10 @@ export class EventsCard {
             photos for that event.
           </p>
           <create-new-event-form
-            onCreateEventSuccess={e => (appDataStore.state.currentEvent = e.detail)}
+            onCreateEventSuccess={e => {
+              appDataStore.state.currentEvent = e.detail;
+              appDataStore.state.eventMode = 'capturing';
+            }}
           />
           <br />
 

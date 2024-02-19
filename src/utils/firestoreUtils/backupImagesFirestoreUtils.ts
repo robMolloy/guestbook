@@ -9,16 +9,22 @@ const collectionName = 'backupImages';
 const backupImageUploadSeedSchema = z.object({
   id: z.string(),
   groupId: z.string(),
+  eventId: z.string(),
+  userId: z.string(),
   imageDataUrl: z.string(),
 });
 const backupImageDbEntrySchema = z.object({
   id: z.string(),
   groupId: z.string(),
+  eventId: z.string(),
+  userId: z.string(),
   storagePath: z.string(),
 });
 const backupImageDetails = z.object({
   id: z.string(),
   groupId: z.string(),
+  eventId: z.string(),
+  userId: z.string(),
   storagePath: z.string(),
   downloadUrl: z.string(),
 });
@@ -36,7 +42,13 @@ export const uploadBackupImage = async (seed: TBackupImageUploadSeed) => {
     if (!storageSnapshot.metadata.fullPath)
       throw new Error(`failed to upload doc with id "${seed.id}" into storage`);
 
-    const dbEntry: TBackupImageDbEntrySchema = { id: seed.id, groupId: seed.groupId, storagePath };
+    const dbEntry: TBackupImageDbEntrySchema = {
+      id: seed.id,
+      groupId: seed.groupId,
+      eventId: seed.eventId,
+      userId: seed.userId,
+      storagePath,
+    };
 
     await setDoc(doc(db, collectionName, seed.id), dbEntry); // returns undefined
   } catch (e) {

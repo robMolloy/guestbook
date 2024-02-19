@@ -1,9 +1,19 @@
 import { db } from '@/src/config/firebase-config';
 import dayjs from 'dayjs';
-import { collection, doc, getDoc, getDocs, serverTimestamp, setDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  serverTimestamp,
+  setDoc,
+} from 'firebase/firestore';
 import { z } from 'zod';
 
 const collectionName = 'events';
+const collectionRef = collection(db, collectionName);
 
 export const eventDbEntrySeedSchema = z.object({
   id: z.string(),
@@ -20,29 +30,34 @@ export const eventDbEntrySchema = z.object({
 export type TEventDbEntrySeed = z.infer<typeof eventDbEntrySeedSchema>;
 export type TEventDbEntry = z.infer<typeof eventDbEntrySchema>;
 
-export const readAllValidEventDbEntries = async (p?: { ignoreErrors?: boolean }) => {
+export const readAllValidEventDbEntries = async (p?: {
+  ignoreErrors?: boolean;
+  orderKey?: keyof TEventDbEntry;
+  orderDirection?: 'desc' | 'asc';
+}) => {
   const ignoreErrors = p?.ignoreErrors ?? true;
+  const orderKey = p?.orderKey ?? 'createdAt';
+  const orderDirection = p?.orderDirection ?? 'desc';
   try {
-    const querySnapshot = await getDocs(collection(db, collectionName));
+    const querySnapshot = await getDocs(query(collectionRef, orderBy(orderKey, orderDirection)));
 
     const items: TEventDbEntry[] = [];
     querySnapshot.forEach(doc => {
       const initData = doc.data();
+
       const data = {
         ...initData,
         createdAt: (() => {
-          const date = dayjs(initData?.createdAt?.toDate());
-
-          const rtn = !!date ? date.format('D MMM YYYY hh:mm') : undefined;
-          console.log({ date, rtn });
+          const date = dayjs(initData?.createdAt?.toMillis());
+          const rtn = !!date ? date.format('D MMM YYYY HH:mm') : undefined;
           return rtn;
         })(),
         updatedAt: (() => {
-          const date = initData?.updatedAt?.toDate();
-          return !!date ? dayjs().calendar(dayjs(date)) : undefined;
+          const date = dayjs(initData?.createdAt?.toMillis());
+          const rtn = !!date ? date.format('D MMM YYYY HH:mm') : undefined;
+          return rtn;
         })(),
       };
-      // console.log(data);
 
       const parseResponse = eventDbEntrySchema.safeParse(data);
       if (parseResponse.success) return items.push(parseResponse.data);

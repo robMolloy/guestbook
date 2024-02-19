@@ -12,7 +12,7 @@ export class DisplaySelectedPhoto {
     return (
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <div
-          class="bg-primary"
+          class="bg-primary text-primary-content"
           style={{
             height: '37vh',
             width: `${(37 * 6) / 4}vh`,
@@ -33,7 +33,9 @@ export class DisplaySelectedPhoto {
                 fontSize: '2rem',
               }}
             >
-              <custom-h2>Select your favourite image</custom-h2>
+              <custom-h2>
+                Your favourite photo will display <br /> here once chosen
+              </custom-h2>
             </div>
           )}
         </div>

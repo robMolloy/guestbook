@@ -18,15 +18,17 @@ export class NavBar {
           </div>
           <div class="flex-none">
             <ul class="menu menu-horizontal px-1">
-              <li onClick={() => logoutFirebaseUser()}>
-                <a>logout</a>
-              </li>
+              {appDataStore.state.isLoggedIn && (
+                <li onClick={() => logoutFirebaseUser()}>
+                  <a>logout</a>
+                </li>
+              )}
               <li>
                 <details>
                   <summary>Theme</summary>
                   <ul
                     class="p-2 bg-secondary text-secondary-content rounded-t-none"
-                    style={css({ overflow: 'scroll', maxHeight: '40vh', zIndex: '99' })}
+                    style={css({ overflowY: 'auto', maxHeight: '40vh', zIndex: '99' })}
                   >
                     {appDataStore.state.availableThemes.map(x => (
                       <li onClick={() => (appDataStore.state.theme = x)}>
