@@ -160,8 +160,8 @@ export const readAllValidSelectedImageDbEntries = async (p: {
   }
 };
 
-export const deleteSelectedImageDbEntry = async (id: string) => {
-  await deleteDoc(doc(db, collectionName, id));
+export const deleteSelectedImageDbEntry = async (p: { id: string; userId: string }) => {
+  await deleteDoc(doc(db, collectionName, p.id));
   return { success: true, data: undefined } as const;
 };
 export const deleteAllValidSelectedImageDbEntries = async (
@@ -171,7 +171,7 @@ export const deleteAllValidSelectedImageDbEntries = async (
   if (!response.success) return response;
 
   for (const item of response.data) {
-    await deleteSelectedImageDbEntry(item.id);
+    await deleteSelectedImageDbEntry({ id: item.id, userId: p.userId });
   }
   return readAllValidSelectedImageDbEntries(p);
 };

@@ -1,14 +1,23 @@
-import { Component, Host, h } from '@stencil/core';
+import { Component, Host, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'button-container',
-  shadow: true,
 })
 export class ButtonContainer {
+  @Prop() paddingX = 20;
+  @Prop() paddingY = 20;
   render() {
     return (
       <Host>
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '20px', gap: '20px' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            paddingX: `${this.paddingX}px`,
+            paddingY: `${this.paddingY}px`,
+            gap: '20px',
+          }}
+        >
           <slot />
         </div>
       </Host>

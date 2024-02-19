@@ -44,7 +44,9 @@ export class RootComponent {
               <events-screen style={css({ minWidth: '100%' })} />
             )}
             {appDataStore.state.status === 'capturing_event' && <capture-cycle />}
-            {appDataStore.state.status === 'managing_event' && <manage-event />}
+            {appDataStore.state.status === 'managing_event' && (
+              <manage-event style={css({ minWidth: '100%' })} />
+            )}
           </div>
         </div>
       </Host>

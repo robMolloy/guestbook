@@ -5,8 +5,12 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { TSelectedImageDbEntry } from "./utils/firestoreUtils/index";
+export { TSelectedImageDbEntry } from "./utils/firestoreUtils/index";
 export namespace Components {
     interface ButtonContainer {
+        "paddingX": number;
+        "paddingY": number;
     }
     interface CaptureCycle {
     }
@@ -70,15 +74,26 @@ export namespace Components {
     }
     interface ManageEvent {
     }
+    interface ManageEventImageAccordian {
+        "selectedImageDbEntry": TSelectedImageDbEntry;
+    }
     interface NavBar {
     }
+    interface RmAccordian {
+        "color"?: TDaisyUiColors;
+        "heading": string;
+    }
     interface RmButton {
-        "color"?: 'primary';
+        "color"?: TDaisyUiColors;
     }
     interface RmCard {
         "heading"?: string;
     }
     interface RmLayout {
+    }
+    interface RmModalButton {
+        "buttonColor"?: TDaisyUiColors;
+        "buttonText": string;
     }
     interface RootComponent {
     }
@@ -311,11 +326,23 @@ declare global {
         prototype: HTMLManageEventElement;
         new (): HTMLManageEventElement;
     };
+    interface HTMLManageEventImageAccordianElement extends Components.ManageEventImageAccordian, HTMLStencilElement {
+    }
+    var HTMLManageEventImageAccordianElement: {
+        prototype: HTMLManageEventImageAccordianElement;
+        new (): HTMLManageEventImageAccordianElement;
+    };
     interface HTMLNavBarElement extends Components.NavBar, HTMLStencilElement {
     }
     var HTMLNavBarElement: {
         prototype: HTMLNavBarElement;
         new (): HTMLNavBarElement;
+    };
+    interface HTMLRmAccordianElement extends Components.RmAccordian, HTMLStencilElement {
+    }
+    var HTMLRmAccordianElement: {
+        prototype: HTMLRmAccordianElement;
+        new (): HTMLRmAccordianElement;
     };
     interface HTMLRmButtonElement extends Components.RmButton, HTMLStencilElement {
     }
@@ -334,6 +361,12 @@ declare global {
     var HTMLRmLayoutElement: {
         prototype: HTMLRmLayoutElement;
         new (): HTMLRmLayoutElement;
+    };
+    interface HTMLRmModalButtonElement extends Components.RmModalButton, HTMLStencilElement {
+    }
+    var HTMLRmModalButtonElement: {
+        prototype: HTMLRmModalButtonElement;
+        new (): HTMLRmModalButtonElement;
     };
     interface HTMLRootComponentElement extends Components.RootComponent, HTMLStencilElement {
     }
@@ -417,10 +450,13 @@ declare global {
         "half-screen-section": HTMLHalfScreenSectionElement;
         "loading-screen": HTMLLoadingScreenElement;
         "manage-event": HTMLManageEventElement;
+        "manage-event-image-accordian": HTMLManageEventImageAccordianElement;
         "nav-bar": HTMLNavBarElement;
+        "rm-accordian": HTMLRmAccordianElement;
         "rm-button": HTMLRmButtonElement;
         "rm-card": HTMLRmCardElement;
         "rm-layout": HTMLRmLayoutElement;
+        "rm-modal-button": HTMLRmModalButtonElement;
         "root-component": HTMLRootComponentElement;
         "test-comp": HTMLTestCompElement;
         "user-auth-card": HTMLUserAuthCardElement;
@@ -431,6 +467,8 @@ declare global {
 }
 declare namespace LocalJSX {
     interface ButtonContainer {
+        "paddingX"?: number;
+        "paddingY"?: number;
     }
     interface CaptureCycle {
     }
@@ -503,15 +541,26 @@ declare namespace LocalJSX {
     }
     interface ManageEvent {
     }
+    interface ManageEventImageAccordian {
+        "selectedImageDbEntry": TSelectedImageDbEntry;
+    }
     interface NavBar {
     }
+    interface RmAccordian {
+        "color"?: TDaisyUiColors;
+        "heading": string;
+    }
     interface RmButton {
-        "color"?: 'primary';
+        "color"?: TDaisyUiColors;
     }
     interface RmCard {
         "heading"?: string;
     }
     interface RmLayout {
+    }
+    interface RmModalButton {
+        "buttonColor"?: TDaisyUiColors;
+        "buttonText": string;
     }
     interface RootComponent {
     }
@@ -551,10 +600,13 @@ declare namespace LocalJSX {
         "half-screen-section": HalfScreenSection;
         "loading-screen": LoadingScreen;
         "manage-event": ManageEvent;
+        "manage-event-image-accordian": ManageEventImageAccordian;
         "nav-bar": NavBar;
+        "rm-accordian": RmAccordian;
         "rm-button": RmButton;
         "rm-card": RmCard;
         "rm-layout": RmLayout;
+        "rm-modal-button": RmModalButton;
         "root-component": RootComponent;
         "test-comp": TestComp;
         "user-auth-card": UserAuthCard;
@@ -588,10 +640,13 @@ declare module "@stencil/core" {
             "half-screen-section": LocalJSX.HalfScreenSection & JSXBase.HTMLAttributes<HTMLHalfScreenSectionElement>;
             "loading-screen": LocalJSX.LoadingScreen & JSXBase.HTMLAttributes<HTMLLoadingScreenElement>;
             "manage-event": LocalJSX.ManageEvent & JSXBase.HTMLAttributes<HTMLManageEventElement>;
+            "manage-event-image-accordian": LocalJSX.ManageEventImageAccordian & JSXBase.HTMLAttributes<HTMLManageEventImageAccordianElement>;
             "nav-bar": LocalJSX.NavBar & JSXBase.HTMLAttributes<HTMLNavBarElement>;
+            "rm-accordian": LocalJSX.RmAccordian & JSXBase.HTMLAttributes<HTMLRmAccordianElement>;
             "rm-button": LocalJSX.RmButton & JSXBase.HTMLAttributes<HTMLRmButtonElement>;
             "rm-card": LocalJSX.RmCard & JSXBase.HTMLAttributes<HTMLRmCardElement>;
             "rm-layout": LocalJSX.RmLayout & JSXBase.HTMLAttributes<HTMLRmLayoutElement>;
+            "rm-modal-button": LocalJSX.RmModalButton & JSXBase.HTMLAttributes<HTMLRmModalButtonElement>;
             "root-component": LocalJSX.RootComponent & JSXBase.HTMLAttributes<HTMLRootComponentElement>;
             "test-comp": LocalJSX.TestComp & JSXBase.HTMLAttributes<HTMLTestCompElement>;
             "user-auth-card": LocalJSX.UserAuthCard & JSXBase.HTMLAttributes<HTMLUserAuthCardElement>;

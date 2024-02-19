@@ -1,5 +1,4 @@
 import appDataStore from '@/src/stores/appDataStore';
-import { css } from '@/src/utils/cssUtils';
 import {
   TSelectedImageDbEntry,
   readAllValidSelectedImageDbEntries,
@@ -10,16 +9,9 @@ import { Component, Host, State, h } from '@stencil/core';
   tag: 'manage-event',
 })
 export class ManageEvent {
+  @State() checked = false;
   @State() status: 'loading' | 'error' | 'success' = 'loading';
   @State() selectedImageDbEntries?: TSelectedImageDbEntry[];
-  // @State() selectedImageDbEntries?: {
-  //   id: string;
-  //   groupId: string;
-  //   eventId: string;
-  //   userId: string;
-  //   storagePath: string;
-  //   downloadUrl: string;
-  // }[];
 
   async componentDidLoad() {
     if (!appDataStore.state.currentEventId || !appDataStore.state.user?.uid)
@@ -40,29 +32,21 @@ export class ManageEvent {
     if (this.status === 'error') return <div>error...</div>;
     if (this.status === 'success')
       return (
-        <Host style={css({ flex: '1', display: 'flex' })}>
+        <Host>
           <rm-layout>
             <rm-card heading="Manage Event">
               <div>
-                This page allows you to manage any open events. You can view any previously taken
-                photos
+                This page allows you to manage any open events. View any photos or continue with
+                your event by clicking the button below.
               </div>
               <button-container>
-                <rm-button
-                  onClick={e => {
-                    appDataStore.state.eventMode = 'capturing';
-                  }}
-                >
-                  asjkdhkash
+                <rm-button onClick={() => (appDataStore.state.eventMode = 'capturing')}>
+                  Continue
                 </rm-button>
               </button-container>
               {this.selectedImageDbEntries?.map(x => (
-                <div>
-                  <img src={x.downloadUrl} />
-                  <br />
-                </div>
+                <manage-event-image-accordian selectedImageDbEntry={x} />
               ))}
-              {<pre>{JSON.stringify(this.selectedImageDbEntries, undefined, 2)}</pre>}
             </rm-card>
           </rm-layout>
         </Host>
