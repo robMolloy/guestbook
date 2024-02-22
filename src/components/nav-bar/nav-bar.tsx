@@ -62,18 +62,34 @@ export class NavBar {
                   <details>
                     <summary>Theme</summary>
                     <ul
-                      class="p-2 bg-secondary text-secondary-content rounded-t-none"
                       style={css({
                         overflowY: 'auto',
                         maxHeight: '40vh',
                         zIndex: '99',
                         transform: 'translateX(-20px)',
+                        minWidth: '200px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px',
                       })}
                     >
                       {appDataStore.state.availableThemes.map(x => (
-                        <li onClick={() => (appDataStore.state.theme = x)}>
-                          <a>{x}</a>
-                        </li>
+                        <div>
+                          <button
+                            class="btn"
+                            data-theme={x}
+                            style={css({ display: 'flex', minWidth: '100%', flexWrap: 'nowrap' })}
+                            onClick={() => (appDataStore.state.theme = x)}
+                          >
+                            <span style={css({ flex: '1', textAlign: 'left' })}>{x}</span>
+                            <span style={css({ display: 'flex', gap: '4px' })}>
+                              <div class="badge badge-primary badge-xs"></div>
+                              <div class="badge badge-secondary badge-xs"></div>
+                              <div class="badge badge-info badge-xs"></div>
+                              <div class="badge badge-accent badge-xs"></div>
+                            </span>
+                          </button>
+                        </div>
                       ))}
                     </ul>
                   </details>
