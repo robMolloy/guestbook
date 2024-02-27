@@ -59,6 +59,9 @@ export class NavBar {
                   </li>
                 )}
                 <li>
+                  <a>whatever</a>
+                </li>
+                <li>
                   <div class="dropdown dropdown-bottom dropdown-end">
                     <div tabindex="0">Theme</div>
                     <ul
