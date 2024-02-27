@@ -59,6 +59,45 @@ export class NavBar {
                   </li>
                 )}
                 <li>
+                  <div class="dropdown dropdown-bottom dropdown-end">
+                    <div tabindex="0">Theme</div>
+                    <ul
+                      tabindex="0"
+                      class="dropdown-content z-[1] menu p-2 shadow bg-base-100 text-base-content rounded-box w-52"
+                      style={css({
+                        overflowY: 'scroll',
+                        maxHeight: '40vh',
+                        zIndex: '99',
+                        transform: 'translateX(-20px)',
+                        minWidth: '200px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flexWrap: 'nowrap',
+                        gap: '10px',
+                      })}
+                    >
+                      {appDataStore.state.availableThemes.map(x => (
+                        <div>
+                          <button
+                            class="btn"
+                            data-theme={x}
+                            style={css({ display: 'flex', minWidth: '100%', flexWrap: 'nowrap' })}
+                            onClick={() => (appDataStore.state.theme = x)}
+                          >
+                            <span style={css({ flex: '1', textAlign: 'left' })}>{x}</span>
+                            <span style={css({ display: 'flex', gap: '4px' })}>
+                              <div class="badge badge-primary badge-xs"></div>
+                              <div class="badge badge-secondary badge-xs"></div>
+                              <div class="badge badge-info badge-xs"></div>
+                              <div class="badge badge-accent badge-xs"></div>
+                            </span>
+                          </button>
+                        </div>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
+                {/* <li>
                   <details>
                     <summary>Theme</summary>
                     <ul
@@ -93,7 +132,7 @@ export class NavBar {
                       ))}
                     </ul>
                   </details>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>

@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property                       | Attribute | Description | Type                                                                                                                       | Default     |
-| ------------------------------ | --------- | ----------- | -------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `mediaDimensions` _(required)_ | --        |             | `{ videoElementWidth: number; videoElementHeight: number; mediaWidth: number; mediaHeight: number; aspectRatio: number; }` | `undefined` |
+| Property                      | Attribute | Description | Type                                                                                                                       | Default     |
+| ----------------------------- | --------- | ----------- | -------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `streamSettings` _(required)_ | --        |             | `{ videoElementWidth: number; videoElementHeight: number; mediaWidth: number; mediaHeight: number; aspectRatio: number; }` | `undefined` |
 
 
 ## Methods
@@ -24,42 +24,15 @@ Type: `Promise<string | undefined>`
 
 
 
-### `clearCountdown() => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `countdown(start: number, stop: number) => Promise<void>`
+### `countdown(p: { start: number; stop: number; clear: boolean; delayInMs?: number | undefined; cb?: ((num: number) => Promise<any> | any) | undefined; }) => Promise<void>`
 
 
 
 #### Parameters
 
-| Name    | Type     | Description |
-| ------- | -------- | ----------- |
-| `start` | `number` |             |
-| `stop`  | `number` |             |
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-### `setCountdownInt(num: number) => Promise<void>`
-
-
-
-#### Parameters
-
-| Name  | Type     | Description |
-| ----- | -------- | ----------- |
-| `num` | `number` |             |
+| Name | Type                                                                                                                          | Description |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `p`  | `{ start: number; stop: number; clear: boolean; delayInMs?: number \| undefined; cb?: ((num: number) => any) \| undefined; }` |             |
 
 #### Returns
 
@@ -72,13 +45,13 @@ Type: `Promise<void>`
 
 ### Used by
 
- - [smart-guestbook-capture-cycle](../smart-guestbook-capture-cycle)
+ - [dumb-capture-cycle](../dumb-capture-cycle)
 
 ### Graph
 ```mermaid
 graph TD;
-  smart-guestbook-capture-cycle --> guestbook-capture-cycle
-  style guestbook-capture-cycle fill:#f9f,stroke:#333,stroke-width:4px
+  dumb-capture-cycle --> capture-cycle-display-stream
+  style capture-cycle-display-stream fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------
